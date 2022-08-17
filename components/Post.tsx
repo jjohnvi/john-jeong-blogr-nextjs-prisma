@@ -25,6 +25,9 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
           color: inherit;
           padding: 2rem;
         }
+        div:hover {
+          cursor: pointer;
+        }
       `}</style>
     </div>
   );
