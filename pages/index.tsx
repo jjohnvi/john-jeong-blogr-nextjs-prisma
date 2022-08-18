@@ -34,7 +34,20 @@ type Props = {
   feed: PostProps[];
 };
 
+/**
+ * console.log(props) brings an OBJECT that has an array of the posts.
+ * passing down props, which came from prisma.post.findMany
+ * needs to be put in the parameter of the Blog function to be able to map through the posts to display
+ * it in the feed and to pass down the props info to the Post component which is the child of this page.
+ * It goes to /p/${post.id} which is the params.
+ *
+ * To not be confused which component you're passing it down to, remember
+ * that typescript requires you to type the type out on the component you're passing it down to.
+ * That component will expect all those properties to be typed out or typescript will throw and error.
+ */
+
 const Blog: React.FC<Props> = (props) => {
+  // console.log(props);
   return (
     <Layout>
       <div className="page">

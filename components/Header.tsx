@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
+import styled from "styled-components";
 
 const Header: React.FC = () => {
   const router = useRouter();
@@ -234,3 +235,5 @@ const Header: React.FC = () => {
 };
 
 export default Header;
+
+// styled components

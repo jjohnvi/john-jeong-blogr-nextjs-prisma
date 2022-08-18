@@ -74,6 +74,10 @@ const Draft: React.FC = () => {
             padding: 1rem 2rem;
           }
 
+          input:hover {
+            box-shadow: 1px 1px 3px #aaa;
+          }
+
           .back {
             margin-left: 1rem;
           }

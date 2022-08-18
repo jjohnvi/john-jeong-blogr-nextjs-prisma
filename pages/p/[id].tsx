@@ -3,7 +3,6 @@ import { GetServerSideProps } from "next";
 import ReactMarkdown from "react-markdown";
 import Router from "next/router";
 import Layout from "../../components/Layout";
-import { PostProps } from "../../components/Post";
 import { useSession } from "next-auth/react";
 import prisma from "../../lib/prisma";
 
@@ -14,11 +13,29 @@ import prisma from "../../lib/prisma";
  */
 
 /**
- * in this function takes a parameter called params which comes from prisma.
- * With the id that comes in prisma is how we select which specific post we are updating. In this case, we are only making sure that the post has an author. If this exists, the post will be sent and available.
+ * in this function takes a parameter called params which comes from [id] which is the file name.
+ * With the id is how we select which specific post we are updating. In this case, we are only making sure that the post has an author. If this exists, the post will be sent and available.
  * params comes from this component. This is a feature of Next.js
  */
 
+/**
+ * getServerSideProps and getStatisProps is only used on pages, not components.
+ * Functional components are to be used in components.
+ * Prop Types are also to be typed and defined in the page, not in the components.
+ * Fetching data is to be done in the pages as well. Big decisions are done in the pages.
+ * Deciding what type of information, getting information from prisma/database is done on pages.
+ * Otherwise, next/typescript will throw an error.
+ * Next.Js set it up so that file paths are how routing would work.
+ *
+ * So, since this file is named [id].tsx, in the url itself, will have a param.
+ * This URL query is filled by the id of the post itself.
+ *
+ * This is a page.
+ * this is a specific post.
+ * Now we have access to ID.
+ * Because the file name is in square brackets, it will show up as a key in `params`.
+ * Now that we have the id, we tell prisma to find a post using this id.
+ */
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const post = await prisma.post.findUnique({
     where: {
@@ -28,9 +45,20 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       author: {
         select: { name: true, email: true },
       },
+      comments: {
+        select: {
+          content: true,
+          user: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
-  console.log(post);
+  post.comments[0].user.name;
+  // console.log(post);
   return {
     props: post,
   };
@@ -54,6 +82,23 @@ async function deletePost(id: string): Promise<void> {
   Router.push("/");
 }
 
+type PostProps = {
+  id: string;
+  title: string;
+  author: {
+    name: string;
+    email: string;
+  } | null;
+  content: string;
+  published: boolean;
+  comments: Array<{
+    content: string;
+    user: {
+      name: string;
+    };
+  }>;
+};
+
 const Post: React.FC<PostProps> = (props) => {
   const { data: session, status } = useSession();
   if (status === "loading") {
@@ -75,6 +120,9 @@ const Post: React.FC<PostProps> = (props) => {
         <h2>{title}</h2>
         <p>By {props?.author?.name || "Unknown author"}</p>
         <ReactMarkdown children={props.content} />
+        <h1>{props.comments[0].content}</h1>
+        <p>{props.comments[0].user.name}</p>
+        {/* TODO: create html for a comment */}
         {!props.published && userHasValidSession && postBelongsToUser && (
           <button onClick={() => publishPost(props.id)}>Publish</button>
         )}

@@ -13,7 +13,15 @@ export type PostProps = {
   published: boolean;
 };
 
+/**
+ * this is how routing starts. This file/component has props. They get the information from the feed. The feed has
+ * access to the entire object properties of post. e.g. id, title, content, author, authorId, etc.
+ * This is what gets put in the parameter, which is labeled as post.
+ * When you console log post, the object of a post appears with all its properties.
+ */
+
 const Post: React.FC<{ post: PostProps }> = ({ post }) => {
+  // console.log(post);
   const authorName = post.author ? post.author.name : "Unknown author";
   return (
     <div onClick={() => Router.push("/p/[id]", `/p/${post.id}`)}>
