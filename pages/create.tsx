@@ -8,7 +8,7 @@ const Draft: React.FC = () => {
 
   const submitData = async (e: React.SyntheticEvent) => {
     // const submitData: React.FormEventHandler<HTMLFormElement> = async (e) => {
-    console.log(e);
+    // console.log(e);
     e.preventDefault();
     try {
       const body = { title, content };

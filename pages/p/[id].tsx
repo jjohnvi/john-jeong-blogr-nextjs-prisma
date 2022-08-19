@@ -5,6 +5,14 @@ import Router from "next/router";
 import Layout from "../../components/Layout";
 import { useSession } from "next-auth/react";
 import prisma from "../../lib/prisma";
+import { useState, useEffect } from "react";
+import styled from "styled-components";
+import {
+  HiTrash,
+  HiBan,
+  HiChat,
+  HiOutlineDotsHorizontal,
+} from "react-icons/hi";
 
 /**
  * this page used `getServerSideProps` (SSR) instead of `getStaticProps` (SSG).
@@ -48,6 +56,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       comments: {
         select: {
           content: true,
+          id: true,
           user: {
             select: {
               name: true,
@@ -57,7 +66,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       },
     },
   });
-  post.comments[0].user.name;
+  // post.comments[0].user.name;
   // console.log(post);
   return {
     props: post,
@@ -82,6 +91,13 @@ async function deletePost(id: string): Promise<void> {
   Router.push("/");
 }
 
+// async function addComment(id: string, content: string): Promise<void> {
+//   await fetch(`/api/comment/${id}`, {
+//     method: "POST",
+//   });
+//   Router.push(`/p/${id}`);
+// }
+
 type PostProps = {
   id: string;
   title: string;
@@ -93,6 +109,7 @@ type PostProps = {
   published: boolean;
   comments: Array<{
     content: string;
+    id: string;
     user: {
       name: string;
     };
@@ -100,19 +117,81 @@ type PostProps = {
 };
 
 const Post: React.FC<PostProps> = (props) => {
+  const [editMode, setEditMode] = useState(false);
+  const [comment, setComment] = useState("");
+  const [newComment, setNewComment] = useState("");
+  const [viewEditComment, setViewEditcomment] = useState(false);
+  const [viewComment, setViewComment] = useState(false);
   const { data: session, status } = useSession();
   if (status === "loading") {
     return <div>Authenticating ...</div>;
   }
   const userHasValidSession = Boolean(session);
   const postBelongsToUser = session?.user?.email === props.author?.email;
+  // const commentBelongsToUser = session?.user?.email === props.
   let title = props.title;
   if (!props.published) {
     title = `${title} (Draft)`;
   }
 
+  const addComment = async (e: React.SyntheticEvent) => {
+    // const submitData: React.FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+    try {
+      const body = { content: comment };
+      await fetch(`/api/comment?postId=${props.id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      setComment("");
+      changeViewComment();
+      await Router.push(`/p/${props.id}`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  async function deleteComment(id: string): Promise<void> {
+    console.log(id);
+    await fetch(`/api/comment/${id}`, {
+      method: "DELETE",
+    });
+    Router.push(`/p/${props.id}`);
+  }
+
+  async function updateComment(
+    id: string,
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> {
+    e.preventDefault();
+    const body = { content: newComment };
+    await fetch(`/api/comment/update/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    setNewComment("");
+    changeViewEditComment();
+    setEditMode(false);
+    Router.push(`/p/${props.id}`);
+  }
+
   // console.log(session);
   // console.log(props);
+
+  const changeViewEditComment = () => {
+    setViewEditcomment(!viewEditComment);
+  };
+
+  const changeViewComment = () => {
+    setViewComment(!viewComment);
+  };
+
+  const changeEditMode = () => {
+    setEditMode(!editMode);
+    setViewEditcomment(true);
+  };
 
   return (
     <Layout>
@@ -120,15 +199,80 @@ const Post: React.FC<PostProps> = (props) => {
         <h2>{title}</h2>
         <p>By {props?.author?.name || "Unknown author"}</p>
         <ReactMarkdown children={props.content} />
-        <h1>{props.comments[0].content}</h1>
-        <p>{props.comments[0].user.name}</p>
+
         {/* TODO: create html for a comment */}
         {!props.published && userHasValidSession && postBelongsToUser && (
           <button onClick={() => publishPost(props.id)}>Publish</button>
         )}
-        {userHasValidSession && postBelongsToUser && (
-          <button onClick={() => deletePost(props.id)}>Delete</button>
-        )}
+        <ViewCommentDiv>
+          {userHasValidSession && postBelongsToUser && (
+            <button onClick={() => deletePost(props.id)}>
+              <HiTrash />
+            </button>
+          )}
+          {viewComment ? (
+            <div>
+              <TextArea
+                value={comment}
+                placeholder="Comment..."
+                onChange={(e) => setComment(e.target.value)}
+              />
+              <button onClick={addComment}>Submit</button>
+
+              <button onClick={() => changeViewComment()}>
+                <HiBan />
+              </button>
+            </div>
+          ) : (
+            <button onClick={() => changeViewComment()}>
+              <HiChat />
+            </button>
+          )}
+        </ViewCommentDiv>
+        <div>
+          {props.comments
+            ? props.comments.map((comment) => {
+                return (
+                  <div>
+                    <p>{comment.content}</p>
+                    <h3>{comment.user.name}</h3>
+                    {editMode ? (
+                      <div>
+                        <button onClick={() => changeEditMode()}>
+                          <HiOutlineDotsHorizontal />
+                        </button>
+                        <button onClick={() => deleteComment(comment.id)}>
+                          <HiTrash />
+                        </button>
+                        {viewEditComment ? (
+                          <div>
+                            <form
+                              onSubmit={(e) => updateComment(comment.id, e)}
+                            >
+                              <input
+                                placeholder="New comment..."
+                                onChange={(e) => setNewComment(e.target.value)}
+                                value={newComment}
+                              />
+                              <InputButton
+                                disabled={!newComment}
+                                type="submit"
+                                value="Update"
+                              />
+                            </form>
+                          </div>
+                        ) : null}
+                      </div>
+                    ) : (
+                      <button onClick={() => changeEditMode()}>
+                        <HiOutlineDotsHorizontal />
+                      </button>
+                    )}
+                  </div>
+                );
+              })
+            : null}
+        </div>
       </div>
       <style jsx>{`
         .page {
@@ -160,3 +304,31 @@ const Post: React.FC<PostProps> = (props) => {
 };
 
 export default Post;
+
+const ViewCommentDiv = styled.div`
+  display: flex;
+`;
+
+const TextArea = styled.textarea`
+  width: 100%;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  border-radius: 0.25rem;
+  border: 0.125rem solid rgba(0, 0, 0.2);
+`;
+
+const InputButton = styled.input`
+  background: #ececec;
+  border: 0;
+  padding: 0;
+  padding: 1rem 2rem;
+
+  &:hover {
+    box-shadow: 1px 1px 3px #aaa;
+
+    &:disabled {
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  }
+`;
