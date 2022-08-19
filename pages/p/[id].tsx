@@ -60,6 +60,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
           user: {
             select: {
               name: true,
+              id: true,
             },
           },
         },
@@ -105,6 +106,7 @@ type PostProps = {
     name: string;
     email: string;
   } | null;
+  authorId: string;
   content: string;
   published: boolean;
   comments: Array<{
@@ -112,6 +114,7 @@ type PostProps = {
     id: string;
     user: {
       name: string;
+      id: string;
     };
   }>;
 };
@@ -126,9 +129,10 @@ const Post: React.FC<PostProps> = (props) => {
   if (status === "loading") {
     return <div>Authenticating ...</div>;
   }
+  console.log(session);
+  console.log(props);
   const userHasValidSession = Boolean(session);
   const postBelongsToUser = session?.user?.email === props.author?.email;
-  // const commentBelongsToUser = session?.user?.email === props.
   let title = props.title;
   if (!props.published) {
     title = `${title} (Draft)`;
@@ -236,38 +240,44 @@ const Post: React.FC<PostProps> = (props) => {
                   <div>
                     <p>{comment.content}</p>
                     <h3>{comment.user.name}</h3>
-                    {editMode ? (
-                      <div>
-                        <button onClick={() => changeEditMode()}>
-                          <HiOutlineDotsHorizontal />
-                        </button>
-                        <button onClick={() => deleteComment(comment.id)}>
-                          <HiTrash />
-                        </button>
-                        {viewEditComment ? (
+                    {session && session.user.name === props.author.name ? (
+                      <>
+                        {editMode ? (
                           <div>
-                            <form
-                              onSubmit={(e) => updateComment(comment.id, e)}
-                            >
-                              <input
-                                placeholder="New comment..."
-                                onChange={(e) => setNewComment(e.target.value)}
-                                value={newComment}
-                              />
-                              <InputButton
-                                disabled={!newComment}
-                                type="submit"
-                                value="Update"
-                              />
-                            </form>
+                            <button onClick={() => changeEditMode()}>
+                              <HiOutlineDotsHorizontal />
+                            </button>
+                            <button onClick={() => deleteComment(comment.id)}>
+                              <HiTrash />
+                            </button>
+                            {viewEditComment ? (
+                              <div>
+                                <form
+                                  onSubmit={(e) => updateComment(comment.id, e)}
+                                >
+                                  <input
+                                    placeholder="New comment..."
+                                    onChange={(e) =>
+                                      setNewComment(e.target.value)
+                                    }
+                                    value={newComment}
+                                  />
+                                  <InputButton
+                                    disabled={!newComment}
+                                    type="submit"
+                                    value="Update"
+                                  />
+                                </form>
+                              </div>
+                            ) : null}
                           </div>
-                        ) : null}
-                      </div>
-                    ) : (
-                      <button onClick={() => changeEditMode()}>
-                        <HiOutlineDotsHorizontal />
-                      </button>
-                    )}
+                        ) : (
+                          <button onClick={() => changeEditMode()}>
+                            <HiOutlineDotsHorizontal />
+                          </button>
+                        )}
+                      </>
+                    ) : null}
                   </div>
                 );
               })

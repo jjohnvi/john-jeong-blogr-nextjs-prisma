@@ -83,7 +83,7 @@ model Comment {
   content   String
   user      User?    @relation(fields: [userId], references: [id])
   userId    String?
-  post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade) // If post gets deleted, all comments referring to that postId gets deleted. 
   postId    String?
 }
 
