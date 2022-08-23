@@ -126,6 +126,7 @@ const Post: React.FC<PostProps> = (props) => {
   const [viewEditComment, setViewEditcomment] = useState(false);
   const [viewComment, setViewComment] = useState(false);
   const { data: session, status } = useSession();
+
   if (status === "loading") {
     return <div>Authenticating ...</div>;
   }
@@ -240,7 +241,7 @@ const Post: React.FC<PostProps> = (props) => {
                   <div>
                     <p>{comment.content}</p>
                     <h3>{comment.user.name}</h3>
-                    {session && session.user.name === props.author.name ? (
+                    {session && session.user.id === comment.user.id ? (
                       <>
                         {editMode ? (
                           <div>
@@ -284,31 +285,6 @@ const Post: React.FC<PostProps> = (props) => {
             : null}
         </div>
       </div>
-      <style jsx>{`
-        .page {
-          background: var(--geist-background);
-          padding: 2rem;
-        }
-
-        .actions {
-          margin-top: 2rem;
-        }
-
-        button {
-          background: #ececec;
-          border: 0;
-          border-radius: 0.125rem;
-          padding: 1rem 2rem;
-        }
-
-        button:hover {
-          box-shadow: 1px 1px 3px #aaa;
-        }
-
-        button + button {
-          margin-left: 1rem;
-        }
-      `}</style>
     </Layout>
   );
 };

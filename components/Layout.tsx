@@ -9,7 +9,7 @@ const Layout: React.FC<Props> = (props) => (
   <div>
     <Header />
     <div className="layout">{props.children}</div>
-    <style jsx global>{`
+    {/* <style jsx global>{`
       html {
         box-sizing: border-box;
       }
@@ -38,12 +38,12 @@ const Layout: React.FC<Props> = (props) => (
       button {
         cursor: pointer;
       }
-    `}</style>
-    <style jsx>{`
+    `}</style> */}
+    {/* <style jsx>{`
       .layout {
         padding: 0 2rem;
       }
-    `}</style>
+    `}</style> */}
   </div>
 );
 

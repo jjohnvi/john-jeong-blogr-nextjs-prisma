@@ -73,22 +73,6 @@ const Drafts = (props: Props) => {
           ))}
         </main>
       </div>
-      <style jsx>
-        {`
-          .post {
-            background: var(--geist-background);
-            transition: box-shadow 0.1s ease-in;
-          }
-
-          .post:hover {
-            box-shadow: 1px 1px 3px #aaa;
-          }
-
-          .post + .post {
-            margin-top: 2rem;
-          }
-        `}
-      </style>
     </Layout>
   );
 };

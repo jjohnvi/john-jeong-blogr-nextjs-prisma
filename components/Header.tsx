@@ -11,76 +11,35 @@ const Header: React.FC = () => {
 
   const { data: session, status } = useSession();
 
-  let left = (
-    <div className="left">
-      <Link href="/">
-        <a className="bold" data-active={isActive("/")}>
-          Feed
-        </a>
-      </Link>
-      <style jsx>{`
-        .bold {
-          font-weight: bold;
-        }
-
-        a {
-          text-decoration: none;
-          color: var(--geist-foreground);
-          display: inline-block;
-        }
-
-        .left a[data-active="true"] {
-          color: gray;
-        }
-
-        a + a {
-          margin-left: 1rem;
-        }
-      `}</style>
+  let toggle = (
+    <div className="bg-[#f5f5f5] w-full flex justify-center">
+      <div className="flex justify-center items-center bg-red-100">
+        <Link href="/">
+          <a className="bold" data-active={isActive("/")}>
+            Feed
+          </a>
+        </Link>
+      </div>
     </div>
   );
 
   let right = null;
 
   if (status === "loading") {
-    left = (
-      <div className="left">
-        <Link href="/">
-          <a className="bold" data-active={isActive("/")}>
-            Feed
-          </a>
-        </Link>
-        <style jsx>
-          {`
-            .bold {
-              font-weight: bold;
-            }
-            a {
-              text-decoration: none;
-              color: var(--geist-foreground);
-              display: inline-block;
-            }
-            .left a [data-active="true"] {
-              color: gray;
-            }
-
-            a + a {
-              margin-left: 1rem;
-            }
-          `}
-        </style>
+    toggle = (
+      <div className="bg-[#f5f5f5] w-full flex justify-center">
+        <div className="flex justify-center items-center bg-red-100 ">
+          <Link href="/">
+            <a className="bold" data-active={isActive("/")}>
+              Feed
+            </a>
+          </Link>
+        </div>
       </div>
     );
     right = (
       <div className="right">
         <p>Validating session ...</p>
-        <style jsx>
-          {`
-            .right {
-              margin-left: auto;
-            }
-          `}
-        </style>
       </div>
     );
   }
@@ -93,72 +52,22 @@ const Header: React.FC = () => {
             Log in
           </a>
         </Link>
-        <style jsx>
-          {`
-            a {
-              text-decoration: none;
-              color: var(--geist-foreground);
-              display: inline-block;
-            }
-
-            a:hover {
-              box-shadow: 1px 1px 3px #aaa;
-            }
-
-            a + a {
-              margin-left: 1rem;
-            }
-
-            .right {
-              margin-left: auto;
-            }
-
-            .right a {
-              border: 1px solid var(--geist-foreground);
-              padding: 0.5rem 1rem;
-              border-radius: 3px;
-            }
-          `}
-        </style>
       </div>
     );
   }
   if (session) {
-    left = (
-      <div className="left">
-        <Link href="/">
-          <a className="bold" data-astive={isActive("/")}>
-            Feed
-          </a>
-        </Link>
-        <Link href="/drafts">
-          <a data-active={isActive("/drafts")}>My drafts</a>
-        </Link>
-        <style jsx>
-          {`
-            .bold {
-              font-weight: bold;
-            }
-
-            a {
-              text-decoration: none;
-              color: var(--geist-foreground);
-              display: inline-block;
-            }
-
-            a:hover {
-              box-shadow: 1px 1px 3px #aaa;
-            }
-
-            .left a[data-active="true"] {
-              color: gray;
-            }
-
-            a + a {
-              margin-left: 1rem;
-            }
-          `}
-        </style>
+    toggle = (
+      <div className="bg-[#f5f5f5] w-full flex justify-center">
+        <div className="flex justify-center items-center bg-red-100 ">
+          <Link href="/">
+            <a className="bold" data-astive={isActive("/")}>
+              Feed
+            </a>
+          </Link>
+          <Link href="/drafts">
+            <a data-active={isActive("/drafts")}>My drafts</a>
+          </Link>
+        </div>
       </div>
     );
 
@@ -175,61 +84,14 @@ const Header: React.FC = () => {
         <button className="button" onClick={() => signOut()}>
           <a>Log out</a>
         </button>
-        <style jsx>
-          {`
-            a {
-              text-decoration: none;
-              color: var(--geist-foreground);
-              display: inline-block;
-            }
-
-            p {
-              display: inline-block;
-              font-size: 13px;
-              padding-right: 1rem;
-            }
-
-            a + a {
-              margin-left: 1rem;
-            }
-
-            .right {
-              margin-left: auto;
-            }
-
-            .right a {
-              border: 1px solid var(--geist-foreground);
-              padding: 0.5rem 1rem;
-              border-radius: 3px;
-            }
-
-            .button {
-              appearance: none;
-              border: 0;
-              background: var(--geist-background);
-              transition: box-shadow 0.1s ease-in;
-            }
-
-            .button:hover {
-              box-shadow: 1px 1px 3px #aaa;
-            }
-          `}
-        </style>
       </div>
     );
   }
 
   return (
-    <nav>
-      {left}
+    <nav className="flex flex-col justify-between bg-[#f5f5f5]">
       {right}
-      <style jsx>{`
-        nav {
-          display: flex;
-          padding: 2rem;
-          align-items: center;
-        }
-      `}</style>
+      {toggle}
     </nav>
   );
 };
@@ -237,3 +99,11 @@ const Header: React.FC = () => {
 export default Header;
 
 // styled components
+const LeftDiv = styled.div`
+  max-width: 768px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  bottom: 0;
+`;

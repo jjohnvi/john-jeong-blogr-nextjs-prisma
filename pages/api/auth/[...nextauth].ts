@@ -10,6 +10,14 @@ const authHandler: NextApiHandler = (req, res) => NextAuth(req, res, options);
 export default authHandler;
 
 const options = {
+  callbacks: {
+    session: async ({ session, user }) => {
+      return {
+        ...session,
+        user,
+      };
+    },
+  },
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_ID,
