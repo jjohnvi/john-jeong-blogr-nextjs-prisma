@@ -201,11 +201,8 @@ const Post: React.FC<PostProps> = (props) => {
   return (
     <Layout>
       <div>
-        <h2>{title}</h2>
-        <p>By {props?.author?.name || "Unknown author"}</p>
+        <h2>{props?.author?.name || "Unknown author"}</h2>
         <ReactMarkdown children={props.content} />
-
-        {/* TODO: create html for a comment */}
         {!props.published && userHasValidSession && postBelongsToUser && (
           <button onClick={() => publishPost(props.id)}>Publish</button>
         )}

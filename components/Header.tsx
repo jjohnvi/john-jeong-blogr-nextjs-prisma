@@ -13,7 +13,7 @@ const Header: React.FC = () => {
 
   let toggle = (
     <div className="bg-[#f5f5f5] w-full flex justify-center">
-      <div className="flex justify-center items-center bg-red-100">
+      <div className="flex justify-center items-center bg-red-100 w-9/12 rounded-md">
         <Link href="/">
           <a className="bold" data-active={isActive("/")}>
             Feed
@@ -28,7 +28,7 @@ const Header: React.FC = () => {
   if (status === "loading") {
     toggle = (
       <div className="bg-[#f5f5f5] w-full flex justify-center">
-        <div className="flex justify-center items-center bg-red-100 ">
+        <div className="flex justify-center items-center bg-red-100 w-9/12 rounded-md">
           <Link href="/">
             <a className="bold" data-active={isActive("/")}>
               Feed
@@ -58,14 +58,22 @@ const Header: React.FC = () => {
   if (session) {
     toggle = (
       <div className="bg-[#f5f5f5] w-full flex justify-center">
-        <div className="flex justify-center items-center bg-red-100 ">
+        <div className="flex justify-center items-center bg-red-100 w-9/12 rounded-md">
           <Link href="/">
-            <a className="bold" data-astive={isActive("/")}>
+            <a
+              className="w-full flex justify-center"
+              data-astive={isActive("/")}
+            >
               Feed
             </a>
           </Link>
           <Link href="/drafts">
-            <a data-active={isActive("/drafts")}>My drafts</a>
+            <a
+              className="flex justify-center w-full"
+              data-active={isActive("/drafts")}
+            >
+              My drafts
+            </a>
           </Link>
         </div>
       </div>
@@ -89,7 +97,7 @@ const Header: React.FC = () => {
   }
 
   return (
-    <nav className="flex flex-col justify-between bg-[#f5f5f5]">
+    <nav className="flex flex-col justify-between bg-[#f5f5f5] h-32">
       {right}
       {toggle}
     </nav>
