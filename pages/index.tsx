@@ -16,7 +16,7 @@ export const getStaticProps: GetStaticProps = async () => {
     where: { published: true },
     include: {
       author: {
-        select: { name: true },
+        select: { name: true, email: true, image: true },
       },
     },
   });
@@ -48,7 +48,7 @@ type Props = {
  */
 
 const Blog: React.FC<Props> = (props) => {
-  // console.log(props);
+  console.log(props);
   return (
     <Layout>
       <div className="page">

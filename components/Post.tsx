@@ -24,8 +24,11 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
   // console.log(post);
   const authorName = post.author ? post.author.name : "Unknown author";
   return (
-    <div onClick={() => Router.push("/p/[id]", `/p/${post.id}`)}>
-      <h2>{authorName}</h2>
+    <div
+      className="p-5"
+      onClick={() => Router.push("/p/[id]", `/p/${post.id}`)}
+    >
+      <h2 className="pb-3">{authorName}</h2>
       <ReactMarkdown children={post.content} />
     </div>
   );

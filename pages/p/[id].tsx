@@ -182,7 +182,7 @@ const Post: React.FC<PostProps> = (props) => {
     Router.push(`/p/${props.id}`);
   }
 
-  // console.log(session);
+  console.log(session);
   // console.log(props);
 
   const changeViewEditComment = () => {
