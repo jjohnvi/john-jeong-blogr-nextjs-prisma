@@ -8,6 +8,7 @@ export type PostProps = {
   author: {
     name: string;
     email: string;
+    image: string;
   } | null;
   content: string;
   published: boolean;
@@ -25,10 +26,13 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
   const authorName = post.author ? post.author.name : "Unknown author";
   return (
     <div
-      className="p-5"
+      className="py-4"
       onClick={() => Router.push("/p/[id]", `/p/${post.id}`)}
     >
-      <h2 className="pb-3">{authorName}</h2>
+      <div className="flex items-center">
+        <img src={post.author.image} className="w-8 h-8 rounded-full" />
+        <h2 className="pb-3">{authorName}</h2>
+      </div>
       <ReactMarkdown children={post.content} />
     </div>
   );

@@ -1,14 +1,14 @@
 import React, { ReactNode } from "react";
 import Header from "./Header";
-
+import { useRouter } from "next/router";
 type Props = {
   children: ReactNode;
 };
 
 const Layout: React.FC<Props> = (props) => (
-  <div>
+  <div className="bg-red-50 h-screen w-full">
     <Header />
-    <div className="layout">{props.children}</div>
+    <div className="">{props.children}</div>
     {/* <style jsx global>{`
       html {
         box-sizing: border-box;

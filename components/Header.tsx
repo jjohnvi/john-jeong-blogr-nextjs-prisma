@@ -14,8 +14,8 @@ const Header: React.FC = () => {
   const { data: session, status } = useSession();
   let toggle = (
     <div className="bg-[#f5f5f5] w-full flex justify-center h-9">
-      <div className="bg-red-200 w-9/12 flex justify-center ">
-        <div className="flex justify-center items-center bg-red-100 w-11/12 rounded-xl">
+      <div className="bg-red-50 w-9/12 flex justify-center border border-red-200">
+        <div className="flex justify-center items-center bg-red-200 w-11/12 rounded-xl">
           <Link href="/">
             <a className="bold" data-active={isActive("/")}>
               Feed
@@ -31,8 +31,8 @@ const Header: React.FC = () => {
   if (status === "loading") {
     toggle = (
       <div className="bg-[#f5f5f5] w-full flex justify-center h-9">
-        <div className="bg-red-200 w-9/12 flex justify-center">
-          <div className="flex justify-center items-center bg-red-100 w-11/12 rounded-xl">
+        <div className="bg-red-50 w-9/12 flex justify-center border border-red-200">
+          <div className="flex justify-center items-center bg-red-200 w-11/12 rounded-xl">
             <Link href="/">
               <a className="bold" data-active={isActive("/")}>
                 Feed
@@ -63,11 +63,11 @@ const Header: React.FC = () => {
   if (session) {
     toggle = (
       <div className="bg-[#f5f5f5] w-full flex justify-center h-9">
-        <div className="bg-red-200 flex justify-center w-9/12">
-          <div className="flex justify-center items-center bg-red-100 w-11/12 rounded-xl">
+        <div className="bg-red-50 flex justify-center w-full p-0.5 rounded-xl border border-red-200">
+          <div className="flex justify-center items-center w-full">
             <Link href="/">
               <a
-                className="w-full flex justify-center"
+                className="w-full flex justify-center items-center rounded-lg bg-red-200 h-full"
                 data-astive={isActive("/")}
               >
                 Feed
@@ -75,7 +75,7 @@ const Header: React.FC = () => {
             </Link>
             <Link href="/drafts">
               <a
-                className="flex justify-center w-full"
+                className="flex justify-center w-full rounded-xl"
                 data-active={isActive("/drafts")}
               >
                 My drafts
@@ -87,32 +87,33 @@ const Header: React.FC = () => {
     );
 
     right = (
-      <div className="flex justify-center items-center h-20">
+      <div className="flex justify-start items-center h-20 w-full">
         <div className="relative w-12 h-12">
           <img
             src={session.user.image}
-            className="rounded-full border border-gray-100 shadow-sm w-10"
+            className="rounded-full border border-gray-100 shadow-sm w-12"
           />
         </div>
-        <p>
-          {session.user.name} ({session.user.email})
-        </p>
-        <Link href="/create">
+        <h1 className="font-bold p-4 text-xl">Home</h1>
+
+        {/* <Link href="/create">
           <button className="button">
             <a>New Post</a>
           </button>
         </Link>
         <button className="button" onClick={() => signOut()}>
           <a>Log out</a>
-        </button>
+        </button> */}
       </div>
     );
   }
 
   return (
-    <nav className="flex flex-col justify-center bg-[#f5f5f5] h-32">
-      {right}
-      {toggle}
+    <nav className="flex flex-col justify-center items-center bg-red-50 h-32 px-4 w-full">
+      <div className="flex flex-col justify-center items-center w-full">
+        {right}
+        {toggle}
+      </div>
     </nav>
   );
 };
