@@ -3,6 +3,8 @@ import Router from "next/router";
 import ReactMarkdown from "react-markdown";
 import clsx from "clsx";
 import { useRouter } from "next/router";
+import { TbTrash, TbHeart, TbBrandHipchat } from "react-icons/tb";
+import { useSession } from "next-auth/react";
 
 export type PostProps = {
   id: string;
@@ -11,7 +13,9 @@ export type PostProps = {
     name: string;
     email: string;
     image: string;
+    id: string;
   } | null;
+  authorId: string;
   content: string;
   published: boolean;
 };
@@ -25,42 +29,87 @@ export type PostProps = {
 
 const Post: React.FC<{ post: PostProps }> = ({ post }) => {
   const router = useRouter();
+  const { data: session, status } = useSession();
   const isActive: (pathname: String) => boolean = (pathname) =>
     router.pathname === pathname;
   const authorName = post.author ? post.author.name : "Unknown author";
+
+  async function deletePost(id: string): Promise<void> {
+    await fetch(`/api/post/${id}`, {
+      method: "DELETE",
+    });
+    if (isActive("/")) {
+      Router.push("/");
+    } else if (isActive("/drafts")) {
+      Router.push("/drafts");
+    }
+  }
+
+  console.log(session);
+  // console.log(post);
   return (
-    <div
-      className="py-4"
-      onClick={() => Router.push("/p/[id]", `/p/${post.id}`)}
-    >
-      <div className="flex items-center">
+    <div className="py-4">
+      <div className="flex items-center justify-between">
         {isActive("/") && (
           <>
-            <img
-              src={post.author.image}
-              className="w-[30px] h-[30px] rounded-full"
-            />
-            <h2 className="font-semibold flex items-center p-[8px]">
-              {authorName}
-            </h2>{" "}
+            <div className="flex justify-start items-center w-full">
+              <img
+                src={post.author.image}
+                className="w-[30px] h-[30px] rounded-full"
+              />
+              <h2 className="font-semibold flex items-center p-[8px]">
+                {authorName}
+              </h2>
+              <div>{post.author.email}</div>
+            </div>
+            {session && session.user.id === post.authorId ? (
+              <button
+                onClick={() => deletePost(post.id)}
+                className="flex justify-end w-[16px] h-[18px]"
+              >
+                <TbTrash />
+              </button>
+            ) : null}
           </>
         )}
+        {/* <div className="mb-2 flex justify-between w-full"> */}
         {isActive("/drafts") && (
           <div className="">
             {post.published && (
-              <div className="flex justify-center items-center rounded-[16px] w-[100px] h-[32px] bg-[#FF7070] p-[8px] text-[#FFFAFA] text-[14px]">
-                Pubished
+              <div className="mb-2 flex justify-between w-full">
+                <div className="flex justify-center items-center rounded-[16px] w-[100px] h-[32px] bg-[#FF7070] p-[8px] text-[#FFFAFA] text-[14px]">
+                  Pubished
+                </div>
               </div>
             )}
           </div>
         )}
         {!post.published && (
-          <div className="flex justify-center items-center rounded-[16px] w-[100px] h-[32px] bg-[#D9D9D9] p-[8px] text-[14px]">
-            Unpublished
+          <div className="mb-2 flex justify-between w-full">
+            <div className="flex justify-center items-center rounded-[16px] w-[100px] h-[32px] bg-[#D9D9D9] p-[8px] text-[14px]">
+              Unpublished
+            </div>
+          </div>
+        )}
+        {session && isActive("/drafts") && session.user.id === post.authorId ? (
+          <button
+            onClick={() => deletePost(post.id)}
+            className="flex justify-end w-[16px] h-[18px]"
+          >
+            <TbTrash />
+          </button>
+        ) : null}
+        {/* </div> */}
+      </div>
+      <div onClick={() => Router.push("/p/[id]", `/p/${post.id}`)}>
+        <ReactMarkdown children={post.content} />
+        {isActive("/") && (
+          <div className="flex pt-4">
+            <TbHeart />
+            <TbBrandHipchat />
           </div>
         )}
       </div>
-      <ReactMarkdown children={post.content} />
     </div>
   );
 };
