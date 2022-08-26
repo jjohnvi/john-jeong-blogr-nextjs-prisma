@@ -31,11 +31,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const drafts = await prisma.post.findMany({
     where: {
       author: { email: session.user.email },
-      published: false,
     },
     include: {
       author: {
-        select: { name: true },
+        select: { name: true, email: true, image: true },
       },
     },
   });
@@ -64,10 +63,9 @@ const Drafts = (props: Props) => {
   return (
     <Layout>
       <div className="page">
-        <h1>My Drafts</h1>
         <main>
           {props.drafts.map((post) => (
-            <div key={post.id} className="post">
+            <div key={post.id} className="px-4">
               <Post post={post} />
             </div>
           ))}

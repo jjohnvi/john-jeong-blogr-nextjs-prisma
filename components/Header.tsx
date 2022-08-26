@@ -99,11 +99,14 @@ const Header: React.FC = () => {
             className="rounded-full border border-gray-100 shadow-sm w-12"
           />
         </div>
-        <h1 className="font-bold p-4 text-xl">Home</h1>
+        <h1 className="font-bold p-4 text-xl">
+          {isActive("/drafts") && "My drafts"}
+          {isActive("/") && "Home"}
+        </h1>
 
         <Link href="/create">
-          <button className="flex fixed bottom-4 right-4 justify-center items-center w-16 h-16 rounded-full text-2xl bg-red-200">
-            +
+          <button className="flex fixed bottom-4 right-4 justify-center items-center w-[49.65px] h-[49.65px] rounded-full text-2xl bg-red-200">
+            <a className="">+</a>
           </button>
         </Link>
         {/* <button className="button" onClick={() => signOut()}>

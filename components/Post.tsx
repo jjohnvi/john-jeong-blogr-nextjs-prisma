@@ -1,6 +1,8 @@
 import React from "react";
 import Router from "next/router";
 import ReactMarkdown from "react-markdown";
+import clsx from "clsx";
+import { useRouter } from "next/router";
 
 export type PostProps = {
   id: string;
@@ -22,7 +24,9 @@ export type PostProps = {
  */
 
 const Post: React.FC<{ post: PostProps }> = ({ post }) => {
-  // console.log(post);
+  const router = useRouter();
+  const isActive: (pathname: String) => boolean = (pathname) =>
+    router.pathname === pathname;
   const authorName = post.author ? post.author.name : "Unknown author";
   return (
     <div
@@ -30,8 +34,31 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
       onClick={() => Router.push("/p/[id]", `/p/${post.id}`)}
     >
       <div className="flex items-center">
-        <img src={post.author.image} className="w-8 h-8 rounded-full" />
-        <h2 className="font-semibold flex items-center p-3">{authorName}</h2>
+        {isActive("/") && (
+          <>
+            <img
+              src={post.author.image}
+              className="w-[30px] h-[30px] rounded-full"
+            />
+            <h2 className="font-semibold flex items-center p-[8px]">
+              {authorName}
+            </h2>{" "}
+          </>
+        )}
+        {isActive("/drafts") && (
+          <div className="">
+            {post.published && (
+              <div className="flex justify-center items-center rounded-[16px] w-[100px] h-[32px] bg-[#FF7070] p-[8px] text-[#FFFAFA] text-[14px]">
+                Pubished
+              </div>
+            )}
+          </div>
+        )}
+        {!post.published && (
+          <div className="flex justify-center items-center rounded-[16px] w-[100px] h-[32px] bg-[#D9D9D9] p-[8px] text-[14px]">
+            Unpublished
+          </div>
+        )}
       </div>
       <ReactMarkdown children={post.content} />
     </div>
