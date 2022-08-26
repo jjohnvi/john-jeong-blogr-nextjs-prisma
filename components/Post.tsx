@@ -31,7 +31,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
     >
       <div className="flex items-center">
         <img src={post.author.image} className="w-8 h-8 rounded-full" />
-        <h2 className="pb-3">{authorName}</h2>
+        <h2 className="font-semibold flex items-center p-3">{authorName}</h2>
       </div>
       <ReactMarkdown children={post.content} />
     </div>

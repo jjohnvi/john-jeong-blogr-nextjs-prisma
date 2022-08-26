@@ -2,9 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
-import styled from "styled-components";
-
-export type SessionProps = {};
+import clsx from "clsx";
 
 const Header: React.FC = () => {
   const router = useRouter();
@@ -62,28 +60,35 @@ const Header: React.FC = () => {
   }
   if (session) {
     toggle = (
-      <div className="bg-[#f5f5f5] w-full flex justify-center h-9">
-        <div className="bg-red-50 flex justify-center w-full p-0.5 rounded-xl border border-red-200">
-          <div className="flex justify-center items-center w-full">
-            <Link href="/">
-              <a
-                className="w-full flex justify-center items-center rounded-lg bg-red-200 h-full"
-                data-astive={isActive("/")}
-              >
-                Feed
-              </a>
-            </Link>
-            <Link href="/drafts">
-              <a
-                className="flex justify-center w-full rounded-xl"
-                data-active={isActive("/drafts")}
-              >
-                My drafts
-              </a>
-            </Link>
-          </div>
+      // <div className="w-full flex justify-center h-9">
+      <div className="bg-[#FFFAFA] flex justify-center w-full p-[1px] rounded-[10px] border border-red-200 h-[34px]">
+        <div className="flex justify-center items-center w-full">
+          <Link href="/">
+            <a
+              className={clsx(
+                "w-full flex justify-center items-center rounded-[8px] h-full",
+                isActive("/") && "bg-[#FFD8D8]",
+                !isActive("/") && "bg-[#FFFAFA]"
+              )}
+              data-active={isActive("/")}
+            >
+              Feed
+            </a>
+          </Link>
+          <Link href="/drafts">
+            <a
+              className={clsx(
+                "flex justify-center w-full items-center h-full",
+                isActive("/drafts") && "bg-[#FFD8D8] rounded-[8px]"
+              )}
+              data-active={isActive("/drafts")}
+            >
+              My drafts
+            </a>
+          </Link>
         </div>
       </div>
+      // </div>
     );
 
     right = (
@@ -96,12 +101,12 @@ const Header: React.FC = () => {
         </div>
         <h1 className="font-bold p-4 text-xl">Home</h1>
 
-        {/* <Link href="/create">
-          <button className="button">
-            <a>New Post</a>
+        <Link href="/create">
+          <button className="flex fixed bottom-4 right-4 justify-center items-center w-16 h-16 rounded-full text-2xl bg-red-200">
+            +
           </button>
         </Link>
-        <button className="button" onClick={() => signOut()}>
+        {/* <button className="button" onClick={() => signOut()}>
           <a>Log out</a>
         </button> */}
       </div>
@@ -109,7 +114,7 @@ const Header: React.FC = () => {
   }
 
   return (
-    <nav className="flex flex-col justify-center items-center bg-red-50 h-32 px-4 w-full">
+    <nav className="flex flex-col justify-center items-center bg-[#FFFAFA] h-32 px-4 w-full">
       <div className="flex flex-col justify-center items-center w-full">
         {right}
         {toggle}
@@ -119,13 +124,3 @@ const Header: React.FC = () => {
 };
 
 export default Header;
-
-// styled components
-const LeftDiv = styled.div`
-  max-width: 768px;
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  bottom: 0;
-`;
