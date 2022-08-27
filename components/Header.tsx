@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
+import PostModal from "./PostModal";
 import clsx from "clsx";
 
 const Header: React.FC = () => {
@@ -10,6 +11,12 @@ const Header: React.FC = () => {
     router.pathname === pathname;
 
   const { data: session, status } = useSession();
+
+  const [showModal, setShowModal] = useState(false);
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   let toggle = (
     <div className="bg-[#f5f5f5] w-full flex justify-center h-9">
       <div className="bg-red-50 w-9/12 flex justify-center border border-red-200">
@@ -104,11 +111,16 @@ const Header: React.FC = () => {
           {isActive("/") && "Home"}
         </h1>
 
-        <Link href="/create">
-          <button className="flex fixed bottom-4 right-4 justify-center items-center w-[49.65px] h-[49.65px] rounded-full text-2xl bg-red-200">
-            <a className="">+</a>
-          </button>
-        </Link>
+        {/* Modal html code here */}
+        {/* <Link href="/create"> */}
+        <button
+          onClick={() => setShowModal(true)}
+          className="flex fixed bottom-4 right-4 justify-center items-center w-[49.65px] h-[49.65px] rounded-full text-2xl bg-red-200"
+        >
+          <a className="">+</a>
+        </button>
+        {/* </Link> */}
+
         {/* <button className="button" onClick={() => signOut()}>
           <a>Log out</a>
         </button> */}
@@ -121,6 +133,7 @@ const Header: React.FC = () => {
       <div className="flex flex-col justify-center items-center w-full">
         {right}
         {toggle}
+        <PostModal onClose={closeModal} visible={showModal} />
       </div>
     </nav>
   );
