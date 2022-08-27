@@ -13,6 +13,13 @@ const Header: React.FC = () => {
   const { data: session, status } = useSession();
 
   const [showModal, setShowModal] = useState(false);
+
+  /**
+   * Here you have a function called closeModal.
+   * This is how you type it to be type safe.
+   * closeModal is an arrow function that takes in no parameter that returns void. Doesn't have a return.
+   * It is a function that simple changes state to false.
+   */
   const closeModal = (): void => {
     setShowModal(false);
   };
@@ -113,6 +120,7 @@ const Header: React.FC = () => {
 
         {/* Modal html code here */}
         {/* <Link href="/create"> */}
+
         <button
           onClick={() => setShowModal(true)}
           className="flex fixed bottom-4 right-4 justify-center items-center w-[49.65px] h-[49.65px] rounded-full text-2xl bg-red-200"
@@ -133,6 +141,16 @@ const Header: React.FC = () => {
       <div className="flex flex-col justify-center items-center w-full">
         {right}
         {toggle}
+        {/**Here you are passing down the function that changes state in this component.
+         * To change state in another component, you have to pass down a function that so
+         * you can change the state from another component. Because you're passing this down,
+         * the component you're passing this down to will now expect this function in their parameter.
+         * Whenever you're passing anything down, it will need to be typed out in the parameter with
+         * the name and its type. closeModal is a parameter called onClose that's a function that returns void. That types out as
+         * onClose: () => void. We are also passing down the state which is showModal. We are passing it down
+         * to be called visible in the PostModal component. This will be typed out as visible: boolean
+         * because it's a variable with a type that is boolean.
+         */}
         <PostModal onClose={closeModal} visible={showModal} />
       </div>
     </nav>

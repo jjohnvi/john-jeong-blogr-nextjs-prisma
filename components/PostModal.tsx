@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import { TbX } from "react-icons/tb";
 
-// type HeaderProps = {
-//   onClose: event:DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
-// }
-
 const PostModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
   visible,
   onClose,
