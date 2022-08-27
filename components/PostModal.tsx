@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import { TbX } from "react-icons/tb";
 
-export default function PostModal({ visible, onClose }) {
+// type HeaderProps = {
+//   onClose: event:DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
+// }
+
+const PostModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
+  visible,
+  onClose,
+}) => {
   if (!visible) return null;
   const [showModal, setShowModal] = useState(false);
   const closeModal = () => setShowModal(false);
@@ -31,4 +38,6 @@ export default function PostModal({ visible, onClose }) {
       </div>
     </div>
   );
-}
+};
+
+export default PostModal;

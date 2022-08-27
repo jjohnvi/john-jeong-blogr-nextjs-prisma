@@ -13,7 +13,7 @@ const Header: React.FC = () => {
   const { data: session, status } = useSession();
 
   const [showModal, setShowModal] = useState(false);
-  const closeModal = () => {
+  const closeModal = (): void => {
     setShowModal(false);
   };
 
