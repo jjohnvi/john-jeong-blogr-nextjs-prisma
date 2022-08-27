@@ -18,14 +18,14 @@ export default function PostModal({ visible, onClose }) {
         <div className="py-4">
           <textarea
             placeholder="What is on your mind?"
-            className="rounded-[10px] bg-[#FFFAFA] border border-[#FFD8D8] w-[356px] h-[144px] p-2"
+            className="rounded-[10px] bg-[#FFFAFA] border border-[#FFD8D8] w-full h-[144px] p-2 resize-none"
           ></textarea>
         </div>
         <div className="flex justify-between items-center pb-[27px]">
           <div>Publish immediately</div>
           <div>Toggle</div>
         </div>
-        <button className="bg-[#FFD8D8] w-[358px] h-[57px] rounded-[16px] text-[24px] font-[700]">
+        <button className="bg-[#FFD8D8] w-full h-[57px] rounded-[16px] text-[24px] font-[700]">
           Save as draft
         </button>
       </div>
