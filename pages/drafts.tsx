@@ -32,6 +32,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     where: {
       author: { email: session.user.email },
     },
+    orderBy: { createdAt: "desc" },
     include: {
       author: {
         select: { name: true, email: true, image: true },

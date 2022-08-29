@@ -14,6 +14,9 @@ import styled from "styled-components";
 export const getStaticProps: GetStaticProps = async () => {
   const feed = await prisma.post.findMany({
     where: { published: true },
+    orderBy: {
+      createdAt: "desc",
+    },
     include: {
       author: {
         select: { name: true, email: true, image: true },

@@ -15,7 +15,6 @@ const PostModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
   const handlePublish = (): void => {
     setPublished(!published);
   };
-  console.log(published);
 
   const submitData = async (e: React.SyntheticEvent) => {
     // const submitData: React.FormEventHandler<HTMLFormElement> = async (e) => {
