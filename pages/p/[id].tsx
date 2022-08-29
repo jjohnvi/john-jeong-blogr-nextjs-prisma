@@ -7,13 +7,14 @@ import { useSession } from "next-auth/react";
 import prisma from "../../lib/prisma";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import Link from "next/link";
 import {
   HiTrash,
   HiBan,
   HiChat,
   HiOutlineDotsHorizontal,
 } from "react-icons/hi";
-import { TbArrowLeft } from "react-icons/tb";
+import { TbArrowLeft, TbSend } from "react-icons/tb";
 
 /**
  * this page used `getServerSideProps` (SSR) instead of `getStaticProps` (SSG).
@@ -52,7 +53,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     },
     include: {
       author: {
-        select: { name: true, email: true },
+        select: { name: true, email: true, image: true },
       },
       comments: {
         select: {
@@ -106,6 +107,7 @@ type PostProps = {
   author: {
     name: string;
     email: string;
+    image: string;
   } | null;
   authorId: string;
   content: string;
@@ -183,7 +185,7 @@ const Post: React.FC<PostProps> = (props) => {
   }
 
   console.log(session);
-  // console.log(props);
+  console.log(props);
 
   const changeViewEditComment = () => {
     setViewEditcomment(!viewEditComment);
@@ -201,42 +203,35 @@ const Post: React.FC<PostProps> = (props) => {
   return (
     <Layout>
       <div className="p-4">
-        <div className="flex justify-between items-center w-6/12 pb-[45px]">
-          <div className="font-[400] text-[26px]">
-            <TbArrowLeft />
+        <div className="border-b border-[#FFD8D8] w-full">
+          <div className="flex justify-between items-center w-6/12 pb-[45px]">
+            <div
+              className="font-[400] text-[26px]"
+              onClick={() => Router.push("/")}
+            >
+              <TbArrowLeft />
+            </div>
+            <h1 className="text-[20px] font-[400]">Comments</h1>
           </div>
-          <h1 className="text-[20px] font-[400]">Comments</h1>
-        </div>
-        <h2>{props?.author?.name || "Unknown author"}</h2>
-        <ReactMarkdown children={props.content} />
-        {!props.published && userHasValidSession && postBelongsToUser && (
+          <div className="flex items-center pb-[12px]">
+            <img
+              src={props.author.image}
+              className="w-[30px] h-[30px] rounded-full"
+            />
+            <h2 className="px-[8px] font-[600] text-[14px]">
+              {props?.author?.name || "Unknown author"}
+            </h2>
+          </div>
+          <ReactMarkdown children={props.content} />
+          {/* {!props.published && userHasValidSession && postBelongsToUser && (
           <button onClick={() => publishPost(props.id)}>Publish</button>
         )}
-        <ViewCommentDiv>
-          {userHasValidSession && postBelongsToUser && (
-            <button onClick={() => deletePost(props.id)}>
-              <HiTrash />
-            </button>
-          )}
-          {viewComment ? (
-            <div>
-              <TextArea
-                value={comment}
-                placeholder="Comment..."
-                onChange={(e) => setComment(e.target.value)}
-              />
-              <button onClick={addComment}>Submit</button>
-
-              <button onClick={() => changeViewComment()}>
-                <HiBan />
-              </button>
-            </div>
-          ) : (
-            <button onClick={() => changeViewComment()}>
-              <HiChat />
-            </button>
-          )}
-        </ViewCommentDiv>
+        {userHasValidSession && postBelongsToUser && (
+          <button onClick={() => deletePost(props.id)}>
+            <HiTrash />
+          </button>
+        )} */}
+        </div>
         <div>
           {props.comments
             ? props.comments.map((comment) => {
@@ -288,23 +283,31 @@ const Post: React.FC<PostProps> = (props) => {
             : null}
         </div>
       </div>
+      <div className="flex fixed bottom-0 w-full h-[62px] border-t border-[#FFD8D8] p-[16px] items-center justify-between">
+        {session ? (
+          <div className="flex items-center w-full">
+            <img
+              src={session.user.image}
+              className="w-[30px] h-[30px] rounded-full"
+            />
+            <input
+              maxLength={255}
+              className="border-none bg-[#FFFAFA w-full h-[62px] flex justify-center items-center outline-none resize-none p-[14px]"
+              value={comment}
+              placeholder={`Comment as ${session.user.name}...`}
+              onChange={(e) => setComment(e.target.value)}
+            />
+            <button onClick={addComment} className="text-[25px] text-[#2D2D2D]">
+              <TbSend />
+            </button>
+          </div>
+        ) : null}
+      </div>
     </Layout>
   );
 };
 
 export default Post;
-
-const ViewCommentDiv = styled.div`
-  display: flex;
-`;
-
-const TextArea = styled.textarea`
-  width: 100%;
-  padding: 0.5rem;
-  margin: 0.5rem 0;
-  border-radius: 0.25rem;
-  border: 0.125rem solid rgba(0, 0, 0.2);
-`;
 
 const InputButton = styled.input`
   background: #ececec;
