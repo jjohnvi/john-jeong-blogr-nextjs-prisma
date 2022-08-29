@@ -205,7 +205,7 @@ const Post: React.FC<PostProps> = (props) => {
           <div>
             <TbArrowLeft />
           </div>
-          <h1>Comments</h1>
+          <h1 className="text-[20px] font-[400]">Comments</h1>
         </div>
         <h2>{props?.author?.name || "Unknown author"}</h2>
         <ReactMarkdown children={props.content} />
