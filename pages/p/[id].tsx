@@ -202,7 +202,7 @@ const Post: React.FC<PostProps> = (props) => {
     <Layout>
       <div className="p-4">
         <div className="flex justify-between items-center w-6/12 pb-[45px]">
-          <div>
+          <div className="font-[400] text-[26px]">
             <TbArrowLeft />
           </div>
           <h1 className="text-[20px] font-[400]">Comments</h1>

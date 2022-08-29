@@ -125,7 +125,9 @@ const Header: React.FC = () => {
           onClick={() => setShowModal(true)}
           className="flex fixed bottom-4 right-4 justify-center items-center w-[49.65px] h-[49.65px] rounded-full text-2xl bg-red-200"
         >
-          <a className="">+</a>
+          <a className="font-[200] text-[40px] flex justify-center items-center pb-1">
+            +
+          </a>
         </button>
         {/* </Link> */}
 
