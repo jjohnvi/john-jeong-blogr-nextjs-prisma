@@ -137,23 +137,27 @@ const Header: React.FC = () => {
   }
 
   return (
-    <nav className="flex flex-col justify-center items-center bg-[#FFFAFA] h-32 px-4 w-full">
-      <div className="flex flex-col justify-center items-center w-full">
-        {right}
-        {toggle}
-        {/**Here you are passing down the function that changes state in this component.
-         * To change state in another component, you have to pass down a function that so
-         * you can change the state from another component. Because you're passing this down,
-         * the component you're passing this down to will now expect this function in their parameter.
-         * Whenever you're passing anything down, it will need to be typed out in the parameter with
-         * the name and its type. closeModal is a parameter called onClose that's a function that returns void. That types out as
-         * onClose: () => void. We are also passing down the state which is showModal. We are passing it down
-         * to be called visible in the PostModal component. This will be typed out as visible: boolean
-         * because it's a variable with a type that is boolean.
-         */}
-        <PostModal onClose={closeModal} visible={showModal} />
-      </div>
-    </nav>
+    <>
+      {!isActive("/") && !isActive("/drafts") ? null : (
+        <nav className="flex flex-col justify-center items-center bg-[#FFFAFA] h-32 px-4 w-full">
+          <div className="flex flex-col justify-center items-center w-full">
+            {right}
+            {toggle}
+            {/**Here you are passing down the function that changes state in this component.
+             * To change state in another component, you have to pass down a function that so
+             * you can change the state from another component. Because you're passing this down,
+             * the component you're passing this down to will now expect this function in their parameter.
+             * Whenever you're passing anything down, it will need to be typed out in the parameter with
+             * the name and its type. closeModal is a parameter called onClose that's a function that returns void. That types out as
+             * onClose: () => void. We are also passing down the state which is showModal. We are passing it down
+             * to be called visible in the PostModal component. This will be typed out as visible: boolean
+             * because it's a variable with a type that is boolean.
+             */}
+            <PostModal onClose={closeModal} visible={showModal} />
+          </div>
+        </nav>
+      )}
+    </>
   );
 };
 

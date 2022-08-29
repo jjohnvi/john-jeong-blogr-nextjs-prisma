@@ -13,6 +13,7 @@ import {
   HiChat,
   HiOutlineDotsHorizontal,
 } from "react-icons/hi";
+import { TbArrowLeft } from "react-icons/tb";
 
 /**
  * this page used `getServerSideProps` (SSR) instead of `getStaticProps` (SSG).
@@ -199,7 +200,13 @@ const Post: React.FC<PostProps> = (props) => {
 
   return (
     <Layout>
-      <div>
+      <div className="p-4">
+        <div className="flex justify-between items-center w-6/12 pb-[45px]">
+          <div>
+            <TbArrowLeft />
+          </div>
+          <h1>Comments</h1>
+        </div>
         <h2>{props?.author?.name || "Unknown author"}</h2>
         <ReactMarkdown children={props.content} />
         {!props.published && userHasValidSession && postBelongsToUser && (
