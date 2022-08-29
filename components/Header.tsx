@@ -97,7 +97,7 @@ const Header: React.FC = () => {
               )}
               data-active={isActive("/drafts")}
             >
-              My drafts
+              My posts
             </a>
           </Link>
         </div>
@@ -114,7 +114,7 @@ const Header: React.FC = () => {
           />
         </div>
         <h1 className="font-bold p-4 text-xl">
-          {isActive("/drafts") && "My drafts"}
+          {isActive("/drafts") && "My posts"}
           {isActive("/") && "Home"}
         </h1>
 

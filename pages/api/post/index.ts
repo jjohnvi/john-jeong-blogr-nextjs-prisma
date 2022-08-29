@@ -12,13 +12,13 @@ import prisma from "../../../lib/prisma";
 // NextAuth.js. Finally, it uses Prisma Client to create a new `Post` record in the database.
 
 export default async function handle(req, res) {
-  const { title, content } = req.body;
+  const { content, published } = req.body;
 
   const session = await getSession({ req });
   const result = await prisma.post.create({
     data: {
-      title: title,
-      content: content,
+      published,
+      content,
       author: { connect: { email: session?.user?.email } },
     },
   });

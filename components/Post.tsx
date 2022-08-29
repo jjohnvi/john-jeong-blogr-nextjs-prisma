@@ -45,7 +45,6 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
     }
   }
 
-  console.log(session);
   // console.log(post);
   return (
     <div className="py-4">
