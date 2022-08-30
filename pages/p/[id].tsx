@@ -63,6 +63,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
             select: {
               name: true,
               id: true,
+              image: true,
             },
           },
         },
@@ -203,7 +204,7 @@ const Post: React.FC<PostProps> = (props) => {
   return (
     <Layout>
       <div className="p-4">
-        <div className="border-b border-[#FFD8D8] w-full">
+        <div className="border-b border- border-[#FFD8D8] w-full pb-[24px]">
           <div className="flex justify-between items-center w-6/12 pb-[45px]">
             <div
               className="font-[400] text-[26px]"
@@ -232,13 +233,21 @@ const Post: React.FC<PostProps> = (props) => {
           </button>
         )} */}
         </div>
-        <div>
+        <div className="pt-[24px]">
           {props.comments
             ? props.comments.map((comment) => {
                 return (
                   <div>
+                    <div className="flex items-center pb-[18px]">
+                      <img
+                        src={comment.user.image}
+                        className="rounded-full w-[30px] h-[30px]"
+                      />
+                      <h3 className="px-[8px] font-[600] text-[14px]">
+                        {comment.user.name}
+                      </h3>
+                    </div>
                     <p>{comment.content}</p>
-                    <h3>{comment.user.name}</h3>
                     {session && session.user.id === comment.user.id ? (
                       <>
                         {editMode ? (
