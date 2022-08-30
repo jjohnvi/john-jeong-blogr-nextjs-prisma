@@ -53,7 +53,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     },
     include: {
       author: {
-        select: { name: true, email: true, image: true },
+        select: { name: true, email: true, image: true, username: true },
       },
       comments: {
         select: {
@@ -70,6 +70,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
               name: true,
               id: true,
               image: true,
+              username: true,
             },
           },
         },
@@ -125,6 +126,8 @@ type PostProps = {
     user: {
       name: string;
       id: string;
+      image: string;
+      username: string;
     };
   }>;
 };
@@ -252,6 +255,7 @@ const Post: React.FC<PostProps> = (props) => {
                       <h3 className="px-[8px] font-[600] text-[14px]">
                         {comment.user.name}
                       </h3>
+                      <p>{comment.user.username}</p>
                     </div>
                     <p>{comment.content}</p>
                     {session && session.user.id === comment.user.id ? (

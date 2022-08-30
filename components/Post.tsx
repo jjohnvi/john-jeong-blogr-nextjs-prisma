@@ -10,6 +10,7 @@ export type PostProps = {
   id: string;
   title: string;
   author: {
+    username: string;
     name: string;
     email: string;
     image: string;
@@ -45,7 +46,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
     }
   }
 
-  // console.log(post);
+  console.log(post);
   return (
     <div className="py-4">
       <div className="flex items-center justify-between">
@@ -59,7 +60,9 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
               <h2 className="font-semibold flex items-center p-[8px]">
                 {authorName}
               </h2>
-              <div>{post.author.email}</div>
+              <div className="font-[400] text-[14px] text-[#737373]">
+                {"@" + post.author.username}
+              </div>
             </div>
             {session && session.user.id === post.authorId ? (
               <button
