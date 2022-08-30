@@ -65,6 +65,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
   comment       Comment[]
+  Reply         Reply[]
+  username      String?   @unique
 
   @@map(name: "users")
 }
@@ -86,6 +88,17 @@ model Comment {
   userId    String?
   post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade) // If post gets deleted, all comments referring to that postId gets deleted. 
   postId    String?
+  reply     Reply[]
+}
+
+model Reply {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  content   String
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId String?
 }
 
 // NextAuthjs requires @map and @@map to map some field and model names to different column and table names in the uderlying database.

@@ -131,9 +131,9 @@ const Header: React.FC = () => {
         </button>
         {/* </Link> */}
 
-        {/* <button className="button" onClick={() => signOut()}>
+        <button className="button" onClick={() => signOut()}>
           <a>Log out</a>
-        </button> */}
+        </button>
       </div>
     );
   }

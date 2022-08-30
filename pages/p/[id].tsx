@@ -59,6 +59,12 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
         select: {
           content: true,
           id: true,
+          reply: {
+            select: {
+              content: true,
+              id: true,
+            },
+          },
           user: {
             select: {
               name: true,
@@ -292,26 +298,31 @@ const Post: React.FC<PostProps> = (props) => {
             : null}
         </div>
       </div>
-      <div className="flex fixed bottom-0 w-full h-[62px] border-t border-[#FFD8D8] p-[16px] items-center justify-between">
-        {session ? (
-          <div className="flex items-center w-full">
-            <img
-              src={session.user.image}
-              className="w-[30px] h-[30px] rounded-full"
-            />
-            <input
-              maxLength={255}
-              className="border-none bg-[#FFFAFA w-full h-[62px] flex justify-center items-center outline-none resize-none p-[14px]"
-              value={comment}
-              placeholder={`Comment as ${session.user.name}...`}
-              onChange={(e) => setComment(e.target.value)}
-            />
-            <button onClick={addComment} className="text-[25px] text-[#2D2D2D]">
-              <TbSend />
-            </button>
-          </div>
-        ) : null}
-      </div>
+      {props.published ? (
+        <div className="flex fixed bottom-0 w-full h-[62px] border-t border-[#FFD8D8] p-[16px] items-center justify-between bg-[#FFFAFA]">
+          {session ? (
+            <div className="flex items-center w-full bg-[#FFFAFA]">
+              <img
+                src={session.user.image}
+                className="w-[30px] h-[30px] rounded-full"
+              />
+              <input
+                maxLength={255}
+                className="border-none bg-[#FFFAFA w-full h-[62px] flex justify-center items-center outline-none resize-none p-[14px]"
+                value={comment}
+                placeholder={`Comment as ${session.user.name}...`}
+                onChange={(e) => setComment(e.target.value)}
+              />
+              <button
+                onClick={addComment}
+                className="text-[25px] text-[#2D2D2D]"
+              >
+                <TbSend />
+              </button>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
     </Layout>
   );
 };
