@@ -51,7 +51,7 @@ const PostModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="What is on your mind?"
-            className="rounded-[10px] bg-[#FFFAFA] border border-[#FFD8D8] w-full h-[144px] p-2 resize-none"
+            className="rounded-[10px] bg-[#FFFAFA] border border-[#FFD8D8] w-full h-[144px] p-2 resize-none outline-none"
           ></textarea>
         </div>
         <div className="flex justify-between items-center pb-[27px]">

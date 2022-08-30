@@ -116,6 +116,7 @@ type PostProps = {
     name: string;
     email: string;
     image: string;
+    username: string;
   } | null;
   authorId: string;
   content: string;
@@ -231,6 +232,9 @@ const Post: React.FC<PostProps> = (props) => {
             <h2 className="px-[8px] font-[600] text-[14px]">
               {props?.author?.name || "Unknown author"}
             </h2>
+            <p className="font-[400] text-[14px] text-[#737373]">
+              {"@" + props?.author?.username}
+            </p>
           </div>
           <ReactMarkdown children={props.content} />
           {/* {!props.published && userHasValidSession && postBelongsToUser && (
@@ -246,8 +250,8 @@ const Post: React.FC<PostProps> = (props) => {
           {props.comments
             ? props.comments.map((comment) => {
                 return (
-                  <div>
-                    <div className="flex items-center pb-[18px]">
+                  <div className="pb-[18px]">
+                    <div className="flex items-center pb-[12px]">
                       <img
                         src={comment.user.image}
                         className="rounded-full w-[30px] h-[30px]"
@@ -255,7 +259,9 @@ const Post: React.FC<PostProps> = (props) => {
                       <h3 className="px-[8px] font-[600] text-[14px]">
                         {comment.user.name}
                       </h3>
-                      <p>{comment.user.username}</p>
+                      <p className="font-[400] text-[14px] text-[#737373]">
+                        {"@" + comment.user.username}
+                      </p>
                     </div>
                     <p>{comment.content}</p>
                     {session && session.user.id === comment.user.id ? (
