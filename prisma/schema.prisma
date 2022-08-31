@@ -19,6 +19,7 @@ model Post {
   author    User?     @relation(fields: [authorId], references: [id])
   authorId  String?
   comments  Comment[]
+  Like      Like[]
 }
 
 model Account {
@@ -67,6 +68,7 @@ model User {
   comment       Comment[]
   Reply         Reply[]
   username      String?
+  Like          Like[]
 
   @@map(name: "users")
 }
@@ -99,6 +101,15 @@ model Reply {
   userId    String?
   comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId String?
+}
+
+model Like {
+  id     String  @id @default(cuid())
+  user   User?   @relation(fields: [userId], references: [id])
+  liked  Boolean @default(false)
+  userId String?
+  post   Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String?
 }
 
 // NextAuthjs requires @map and @@map to map some field and model names to different column and table names in the uderlying database.

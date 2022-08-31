@@ -19,6 +19,7 @@ export type PostProps = {
   authorId: string;
   content: string;
   published: boolean;
+  _count: { comments: number };
 };
 
 /**
@@ -106,9 +107,14 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
       <div onClick={() => Router.push("/p/[id]", `/p/${post.id}`)}>
         <ReactMarkdown children={post.content} />
         {isActive("/") && (
-          <div className="flex pt-4">
+          <div className="flex pt-4 items-center">
             <TbHeart />
-            <TbBrandHipchat />
+            <div className="flex items-center text-[17px]">
+              <div className="pr-[3px]">
+                <TbBrandHipchat />
+              </div>
+              {post?._count?.comments !== 0 ? post?._count?.comments : null}
+            </div>
           </div>
         )}
       </div>
