@@ -59,7 +59,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
         select: {
           content: true,
           id: true,
-          reply: {
+          replies: {
             select: {
               content: true,
               id: true,

@@ -6,7 +6,7 @@ type Props = {
 };
 
 const Layout: React.FC<Props> = (props) => (
-  <div className="bg-[#FFFAFA] h-full w-full">
+  <div className="bg-[#FFFAFA] min-h-screen w-full">
     <Header />
     <div className="h-full w-full">{props.children}</div>
   </div>

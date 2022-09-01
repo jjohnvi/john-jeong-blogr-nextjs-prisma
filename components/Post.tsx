@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import Router from "next/router";
 import ReactMarkdown from "react-markdown";
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import { TbTrash, TbHeart, TbBrandHipchat } from "react-icons/tb";
 import { useSession } from "next-auth/react";
+import axios from "axios";
+import { Like } from "@prisma/client";
+import prisma from "../lib/prisma";
 
 export type PostProps = {
   id: string;
@@ -19,7 +22,8 @@ export type PostProps = {
   authorId: string;
   content: string;
   published: boolean;
-  _count: { comments: number };
+  _count: { comments: number; likes: number };
+  likes: Like[];
 };
 
 /**
@@ -47,7 +51,19 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
     }
   }
 
-  console.log(post);
+  const likePost = async (postId): Promise<void> => {
+    await axios.post(`/api/like/${postId}`);
+  };
+
+  const loggedInUserId = session?.user.id;
+  const isPostLiked = post.likes
+    .map((like) => {
+      return like.userId;
+    })
+    .includes(loggedInUserId);
+
+  console.log(isPostLiked);
+  // console.log(post);
   return (
     <div className="py-4">
       <div className="flex items-center justify-between">
@@ -106,18 +122,28 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
       </div>
       <div onClick={() => Router.push("/p/[id]", `/p/${post.id}`)}>
         <ReactMarkdown children={post.content} />
-        {isActive("/") && (
-          <div className="flex pt-4 items-center">
-            <TbHeart />
-            <div className="flex items-center text-[17px]">
-              <div className="pr-[3px]">
-                <TbBrandHipchat />
-              </div>
-              {post?._count?.comments !== 0 ? post?._count?.comments : null}
-            </div>
-          </div>
-        )}
       </div>
+      {isActive("/") && (
+        <div className="flex pt-4 items-center">
+          <div
+            onClick={() => likePost(post.id)}
+            className="flex items-center text-[17px]"
+          >
+            <div>
+              <TbHeart />
+            </div>
+            {post?._count?.likes !== 0 ? (
+              <div className="px-[3px]">{post?._count?.likes}</div>
+            ) : null}
+          </div>
+          <div className="flex items-center text-[17px]">
+            <div className="pr-[3px]">
+              <TbBrandHipchat />
+            </div>
+            {post?._count?.comments !== 0 ? post?._count?.comments : null}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -22,8 +22,9 @@ export const getStaticProps: GetStaticProps = async () => {
         select: { username: true, email: true, image: true, name: true },
       },
       _count: {
-        select: { comments: true },
+        select: { comments: true, likes: true },
       },
+      likes: true,
     },
   });
   return {
