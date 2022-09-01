@@ -19,3 +19,11 @@ export default async function handle(req, res) {
     );
   }
 }
+
+/**
+ * Here we switched from likeId from req.query.id to postId and userId.
+ * We needed to figure out a way to delete the like that made it unique so we can delete that specific like from the user.
+ * If it was likeId, it'd just take anyone's like and delete it.
+ * Because we have @ @ unique on the prisma schema in the likes table, we have to bring that in as the object where it holds
+ * both postId and userId as an object. Hence line 9-12
+ */

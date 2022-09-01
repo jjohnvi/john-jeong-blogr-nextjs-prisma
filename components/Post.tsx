@@ -56,6 +56,14 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
     Router.push("/");
   };
 
+  /**
+   * in this deleteLike api call, we take in a parameter called postId, because that was our first requirement from req.query.id
+   * in the api delete [id].ts file. This will be passed in from the props this component receives from the main page (index.ts).
+   * With this delete request, we pass in the postId in the parameter and then we also send the userId in the body as it expects
+   * in the api file. This function does not need a second parameter because we will be sending the
+   * session.user.id as the body which comes from UseSession();.
+   */
+
   const deleteLike = async (postId): Promise<void> => {
     await axios.delete(`/api/like/delete/${postId}`, {
       data: { userId: session.user.id },
