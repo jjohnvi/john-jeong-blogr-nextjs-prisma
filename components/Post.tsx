@@ -53,16 +53,41 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
 
   const likePost = async (postId): Promise<void> => {
     await axios.post(`/api/like/${postId}`);
+    Router.push("/");
+  };
+
+  const deleteLike = async (postId): Promise<void> => {
+    await axios.delete(`/api/like/delete/${postId}`, {
+      data: { userId: session.user.id },
+    });
+    Router.push("/");
   };
 
   const loggedInUserId = session?.user.id;
   const isPostLiked = post.likes
-    .map((like) => {
+    ?.map((like) => {
       return like.userId;
     })
     .includes(loggedInUserId);
 
-  console.log(isPostLiked);
+  // const likeDiv = post.likes.map((like) => {
+  //   return (
+  //     <div
+  //       onClick={() => deleteLike(like.id)}
+  //       className="flex items-center text-[17px]"
+  //     >
+  //       <div className="">
+  //         <TbHeart className="fill-[#FF7070]" />
+  //       </div>
+  //       {post?._count?.likes !== 0 ? (
+  //         <div className="px-[3px]">{post?._count?.likes}</div>
+  //       ) : null}
+  //     </div>
+  //   );
+  // });
+
+  // console.log(likeId);
+  // console.log(isPostLiked);
   // console.log(post);
   return (
     <div className="py-4">
@@ -125,17 +150,35 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
       </div>
       {isActive("/") && (
         <div className="flex pt-4 items-center">
-          <div
-            onClick={() => likePost(post.id)}
-            className="flex items-center text-[17px]"
-          >
-            <div>
-              <TbHeart />
+          {!isPostLiked ? (
+            <div
+              onClick={() => likePost(post.id)}
+              className="flex items-center text-[17px]"
+            >
+              <div>
+                <TbHeart />
+              </div>
+              {post?._count?.likes !== 0 ? (
+                <div className="px-[3px]">{post?._count?.likes}</div>
+              ) : null}
             </div>
-            {post?._count?.likes !== 0 ? (
-              <div className="px-[3px]">{post?._count?.likes}</div>
-            ) : null}
-          </div>
+          ) : (
+            isPostLiked && (
+              <>
+                <div
+                  onClick={() => deleteLike(post.id)}
+                  className="flex items-center text-[17px]"
+                >
+                  <div className="">
+                    <TbHeart className="fill-[#FF7070]" />
+                  </div>
+                  {post?._count?.likes !== 0 ? (
+                    <div className="px-[3px]">{post?._count?.likes}</div>
+                  ) : null}
+                </div>
+              </>
+            )
+          )}
           <div className="flex items-center text-[17px]">
             <div className="pr-[3px]">
               <TbBrandHipchat />

@@ -1,10 +1,16 @@
 import prisma from "../../../../lib/prisma";
 
 export default async function handle(req, res) {
-  const likeId = req.query.id;
+  const postId = req.query.id;
+  const { userId } = req.body;
   if (req.method === "DELETE") {
     const like = await prisma.like.delete({
-      where: { id: likeId },
+      where: {
+        userId_postId: {
+          postId: postId,
+          userId: userId,
+        },
+      },
     });
     res.json(like);
   } else {
