@@ -118,7 +118,7 @@ const Header: React.FC = () => {
               />
             </Popover.Button>
 
-            <Popover.Panel className="absolute z-10 rounded-[16px] w-[300px] h-[202px] bg-[#FFEAEA] p-[16px]">
+            <Popover.Panel className="absolute z-10 rounded-[16px] w-[300px] h-[202px] bg-[#FFEAEA] p-[16px] shadow-xl">
               <div className="grid grid-cols-1">
                 <div className="flex border-b border-[#FFD8D8] w-full pb-[13px]">
                   <img
