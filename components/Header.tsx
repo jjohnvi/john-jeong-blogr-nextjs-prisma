@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Popover } from "@headlessui/react";
+import { Popover, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
 import PostModal from "./PostModal";
 import clsx from "clsx";
-import MyPopover from "./MyPopover";
 
 const Header: React.FC = () => {
   const router = useRouter();
@@ -111,38 +110,50 @@ const Header: React.FC = () => {
       <div className="flex justify-start items-center h-20 w-full">
         <div className="relative w-12 h-12">
           <Popover className="relative">
-            <Popover.Button>
+            <Popover.Button className="outline-none">
               <img
                 src={session.user.image}
-                className="rounded-full border border-gray-100 shadow-sm w-12"
+                className="rounded-full border border-gray-100 shadow-sm w-12 outline-none"
               />
             </Popover.Button>
-
-            <Popover.Panel className="absolute z-10 rounded-[16px] w-[300px] h-[202px] bg-[#FFEAEA] p-[16px] shadow-xl">
-              <div className="grid grid-cols-1">
-                <div className="flex border-b border-[#FFD8D8] w-full pb-[13px]">
-                  <img
-                    src={session.user.image}
-                    className="rounded-full border border-gray-100 shadow-sm w-12"
-                  />
-                  <div className="pl-[14px]">
-                    <h1 className="font-[500] text-[17px] text-[#2D2D2D]">
-                      {session.user.name}
-                    </h1>
-                    <h3 className="text-[#737373] font-[500] text-[14px]">
-                      {"@" + session.user.username}
-                    </h3>
+            <Transition
+              enter="transition duration-300 ease-out"
+              enterFrom="transform scale-95 opacity-0"
+              enterTo="transform scale-100 opacity-100"
+              leave="transition duration-300 ease-out"
+              leaveFrom="transform scale-100 opacity-100"
+              leaveTo="transform scale-95 opacity-0"
+            >
+              <Popover.Panel
+                static
+                className="absolute z-10 rounded-[16px] w-[300px] h-[202px] bg-[#FFEAEA] p-[16px] shadow-xl"
+              >
+                <div className="grid grid-cols-1">
+                  <div className="flex border-b border-[#FFD8D8] w-full pb-[13px]">
+                    <img
+                      src={session.user.image}
+                      className="rounded-full border border-gray-100 shadow-sm w-12"
+                    />
+                    <div className="pl-[14px]">
+                      <h1 className="font-[500] text-[17px] text-[#2D2D2D]">
+                        {session.user.name}
+                      </h1>
+                      <h3 className="text-[#737373] font-[500] text-[14px]">
+                        {"@" + session.user.username}
+                      </h3>
+                    </div>
+                  </div>
+                  <div className="pt-[17px]"></div>
+                  <div className="flex justify-start items-center hover:scale-105 hover:text-[16px] hover:rounded-full ease-in duration-300 w-full">
+                    <button className="" onClick={() => signOut()}>
+                      <a>{"Log out @" + session.user.username}</a>
+                    </button>
                   </div>
                 </div>
-                <div className="flex pt-[17px]">
-                  <button className="button" onClick={() => signOut()}>
-                    <a>{"Log out @" + session.user.username}</a>
-                  </button>
-                </div>
-              </div>
 
-              <img src="/solutions.jpg" alt="" />
-            </Popover.Panel>
+                <img src="/solutions.jpg" alt="" />
+              </Popover.Panel>
+            </Transition>
           </Popover>
         </div>
         <h1 className="font-bold p-4 text-xl">
@@ -183,6 +194,7 @@ const Header: React.FC = () => {
              * to be called visible in the PostModal component. This will be typed out as visible: boolean
              * because it's a variable with a type that is boolean.
              */}
+
             <PostModal onClose={closeModal} visible={showModal} />
           </div>
         </nav>
