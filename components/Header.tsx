@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { Popover } from "@headlessui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
 import PostModal from "./PostModal";
 import clsx from "clsx";
+import MyPopover from "./MyPopover";
 
 const Header: React.FC = () => {
   const router = useRouter();
@@ -108,10 +110,40 @@ const Header: React.FC = () => {
     right = (
       <div className="flex justify-start items-center h-20 w-full">
         <div className="relative w-12 h-12">
-          <img
-            src={session.user.image}
-            className="rounded-full border border-gray-100 shadow-sm w-12"
-          />
+          <Popover className="relative">
+            <Popover.Button>
+              <img
+                src={session.user.image}
+                className="rounded-full border border-gray-100 shadow-sm w-12"
+              />
+            </Popover.Button>
+
+            <Popover.Panel className="absolute z-10 rounded-[16px] w-[300px] h-[202px] bg-[#FFEAEA] p-[16px]">
+              <div className="grid grid-cols-1">
+                <div className="flex border-b border-[#FFD8D8] w-full pb-[13px]">
+                  <img
+                    src={session.user.image}
+                    className="rounded-full border border-gray-100 shadow-sm w-12"
+                  />
+                  <div className="pl-[14px]">
+                    <h1 className="font-[500] text-[17px] text-[#2D2D2D]">
+                      {session.user.name}
+                    </h1>
+                    <h3 className="text-[#737373] font-[500] text-[14px]">
+                      {"@" + session.user.username}
+                    </h3>
+                  </div>
+                </div>
+                <div className="flex pt-[17px]">
+                  <button className="button" onClick={() => signOut()}>
+                    <a>{"Log out @" + session.user.username}</a>
+                  </button>
+                </div>
+              </div>
+
+              <img src="/solutions.jpg" alt="" />
+            </Popover.Panel>
+          </Popover>
         </div>
         <h1 className="font-bold p-4 text-xl">
           {isActive("/drafts") && "My posts"}
@@ -130,10 +162,6 @@ const Header: React.FC = () => {
           </a>
         </button>
         {/* </Link> */}
-
-        <button className="button" onClick={() => signOut()}>
-          <a>Log out</a>
-        </button>
       </div>
     );
   }
