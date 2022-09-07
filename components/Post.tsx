@@ -3,10 +3,17 @@ import Router from "next/router";
 import ReactMarkdown from "react-markdown";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import { TbTrash, TbHeart, TbBrandHipchat } from "react-icons/tb";
+import {
+  TbTrash,
+  TbHeart,
+  TbBrandHipchat,
+  TbDotsVertical,
+  TbPencil,
+} from "react-icons/tb";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { Like } from "@prisma/client";
+import { Popover, Transition } from "@headlessui/react";
 import prisma from "../lib/prisma";
 
 export type PostProps = {
@@ -115,12 +122,47 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
               </div>
             </div>
             {session && session.user.id === post.authorId ? (
-              <button
-                onClick={() => deletePost(post.id)}
-                className="flex justify-end w-[16px] h-[18px]"
-              >
-                <TbTrash />
-              </button>
+              <Popover className="relative">
+                <Popover.Button className="outline-none">
+                  <TbDotsVertical />
+                </Popover.Button>
+                <Transition
+                  enter="transition duration-300 ease-out"
+                  enterFrom="transform scale-95 opacity-0"
+                  enterTo="transform scale-100 opacity-100"
+                  leave="transition duration-300 ease-out"
+                  leaveFrom="transform scale-100 opacity-100"
+                  leaveTo="transform scale-95 opacity-0"
+                >
+                  <Popover.Panel
+                    static
+                    className="absolute z-10 rounded-[8px] w-[163px] h-[64px] bg-[#FFFFFF] shadow-xl right-[4px]"
+                  >
+                    <div className="flex flex-col w-full h-full ">
+                      <div className="flex items-center justify-start  w-full h-full p-[2px]">
+                        <button className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full">
+                          <div className="pr-[9.11px]">
+                            <TbPencil />
+                          </div>
+                          edit
+                        </button>
+                      </div>
+                      <div className="border-b border-[#FFD8D8]"></div>
+                      <div className="flex items-center justify-start w-full h-full p-[2px]">
+                        <button
+                          onClick={() => deletePost(post.id)}
+                          className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
+                        >
+                          <div className="pr-[9.11px]">
+                            <TbTrash />
+                          </div>
+                          delete
+                        </button>
+                      </div>
+                    </div>
+                  </Popover.Panel>
+                </Transition>
+              </Popover>
             ) : null}
           </>
         )}
@@ -144,12 +186,33 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
           </div>
         )}
         {session && isActive("/drafts") && session.user.id === post.authorId ? (
-          <button
-            onClick={() => deletePost(post.id)}
-            className="flex justify-end w-[16px] h-[18px]"
-          >
-            <TbTrash />
-          </button>
+          <Popover className="relative">
+            <Popover.Button className="outline-none">
+              <TbTrash />
+            </Popover.Button>
+            <Transition
+              enter="transition duration-300 ease-out"
+              enterFrom="transform scale-95 opacity-0"
+              enterTo="transform scale-100 opacity-100"
+              leave="transition duration-300 ease-out"
+              leaveFrom="transform scale-100 opacity-100"
+              leaveTo="transform scale-95 opacity-0"
+            >
+              <Popover.Panel
+                static
+                className="absolute z-10 rounded-[16px] w-[200px] h-[35px] bg-[#FFEAEA] p-[16px] shadow-xl"
+              >
+                <div className="flex w-full h-full">
+                  <button
+                    onClick={() => deletePost(post.id)}
+                    className="flex items-center w-full h-full"
+                  >
+                    Delete this post?
+                  </button>
+                </div>
+              </Popover.Panel>
+            </Transition>
+          </Popover>
         ) : null}
         {/* </div> */}
       </div>
