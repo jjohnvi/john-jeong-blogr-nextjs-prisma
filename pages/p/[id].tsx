@@ -266,7 +266,7 @@ const Post: React.FC<PostProps> = (props) => {
                     <p>{comment.content}</p>
                     {session && session.user.id === comment.user.id ? (
                       <>
-                        {editMode ? (
+                        {/* {editMode ? (
                           <div>
                             <button onClick={() => changeEditMode()}>
                               <HiOutlineDotsHorizontal />
@@ -299,7 +299,7 @@ const Post: React.FC<PostProps> = (props) => {
                           <button onClick={() => changeEditMode()}>
                             <HiOutlineDotsHorizontal />
                           </button>
-                        )}
+                        )} */}
                       </>
                     ) : null}
                   </div>

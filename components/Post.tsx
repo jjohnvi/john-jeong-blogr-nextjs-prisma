@@ -15,6 +15,7 @@ import axios from "axios";
 import { Like } from "@prisma/client";
 import { Popover, Transition } from "@headlessui/react";
 import prisma from "../lib/prisma";
+import EditModal from "./EditModal";
 
 export type PostProps = {
   id: string;
@@ -41,6 +42,7 @@ export type PostProps = {
  */
 
 const Post: React.FC<{ post: PostProps }> = ({ post }) => {
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const router = useRouter();
   const { data: session, status } = useSession();
   const isActive: (pathname: String) => boolean = (pathname) =>
@@ -61,6 +63,10 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
   const likePost = async (postId): Promise<void> => {
     await axios.post(`/api/like/${postId}`);
     Router.push("/");
+  };
+
+  const closeModal = (): void => {
+    setShowDeleteModal(false);
   };
 
   /**
@@ -150,7 +156,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
                       <div className="border-b border-[#FFD8D8]"></div>
                       <div className="flex items-center justify-start w-full h-full p-[2px]">
                         <button
-                          onClick={() => deletePost(post.id)}
+                          onClick={() => setShowDeleteModal(true)}
                           className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
                         >
                           <div className="pr-[9.11px]">
@@ -188,7 +194,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
         {session && isActive("/drafts") && session.user.id === post.authorId ? (
           <Popover className="relative">
             <Popover.Button className="outline-none">
-              <TbTrash />
+              <TbDotsVertical />
             </Popover.Button>
             <Transition
               enter="transition duration-300 ease-out"
@@ -200,15 +206,29 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
             >
               <Popover.Panel
                 static
-                className="absolute z-10 rounded-[16px] w-[200px] h-[35px] bg-[#FFEAEA] p-[16px] shadow-xl"
+                className="absolute z-10 rounded-[8px] w-[163px] h-[64px] bg-[#FFFFFF] shadow-xl right-[4px]"
               >
-                <div className="flex w-full h-full">
-                  <button
-                    onClick={() => deletePost(post.id)}
-                    className="flex items-center w-full h-full"
-                  >
-                    Delete this post?
-                  </button>
+                <div className="flex flex-col w-full h-full ">
+                  <div className="flex items-center justify-start  w-full h-full p-[2px]">
+                    <button className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full">
+                      <div className="pr-[9.11px]">
+                        <TbPencil />
+                      </div>
+                      edit
+                    </button>
+                  </div>
+                  <div className="border-b border-[#FFD8D8]"></div>
+                  <div className="flex items-center justify-start w-full h-full p-[2px]">
+                    <button
+                      onClick={() => deletePost(post.id)}
+                      className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
+                    >
+                      <div className="pr-[9.11px]">
+                        <TbTrash />
+                      </div>
+                      delete
+                    </button>
+                  </div>
                 </div>
               </Popover.Panel>
             </Transition>
@@ -258,6 +278,12 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
           </div>
         </div>
       )}
+      <EditModal
+        onClose={closeModal}
+        visible={showDeleteModal}
+        deletePost={deletePost}
+        postId={post.id}
+      />
     </div>
   );
 };
