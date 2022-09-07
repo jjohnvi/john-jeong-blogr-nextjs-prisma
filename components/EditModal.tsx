@@ -27,7 +27,7 @@ const EditModal: React.FC<{
             Cancel
           </button>
           <button
-            onClick={deletePost}
+            onClick={() => deletePost(postId)}
             className="w-[122px] h-[40px] bg-[#FF7070] rounded-[8px] text-[#FFEAEA] font-[700] text-[20px]"
           >
             Delete

@@ -220,7 +220,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
                   <div className="border-b border-[#FFD8D8]"></div>
                   <div className="flex items-center justify-start w-full h-full p-[2px]">
                     <button
-                      onClick={() => deletePost(post.id)}
+                      onClick={() => setShowDeleteModal(true)}
                       className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
                     >
                       <div className="pr-[9.11px]">
