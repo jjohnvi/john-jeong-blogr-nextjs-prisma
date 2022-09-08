@@ -15,7 +15,7 @@ import axios from "axios";
 import { Like } from "@prisma/client";
 import { Popover, Transition } from "@headlessui/react";
 import prisma from "../lib/prisma";
-import EditModal from "./EditModal";
+import DeleteModal from "./DeleteModal";
 
 export type PostProps = {
   id: string;
@@ -146,7 +146,12 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
                   >
                     <div className="flex flex-col w-full h-full ">
                       <div className="flex items-center justify-start  w-full h-full p-[2px]">
-                        <button className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full">
+                        <button
+                          className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
+                          onClick={() =>
+                            Router.push("/u/[id]", `/u/${post.id}`)
+                          }
+                        >
                           <div className="pr-[9.11px]">
                             <TbPencil />
                           </div>
@@ -210,7 +215,10 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
               >
                 <div className="flex flex-col w-full h-full ">
                   <div className="flex items-center justify-start  w-full h-full p-[2px]">
-                    <button className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full">
+                    <button
+                      className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
+                      onClick={() => Router.push("/u/[id]", `/u/${post.id}`)}
+                    >
                       <div className="pr-[9.11px]">
                         <TbPencil />
                       </div>
@@ -278,7 +286,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
           </div>
         </div>
       )}
-      <EditModal
+      <DeleteModal
         onClose={closeModal}
         visible={showDeleteModal}
         deletePost={deletePost}

@@ -10,6 +10,27 @@ export default async function handle(req, res) {
       where: { id: postId },
     });
     res.json(post);
+    /**
+     * here for the PUT Method, we had two things in mind that we wanted to change which was the content of the post and to change if it's published
+     * or not. The reason we wrote it this way is because I wanted to use this in two different components, only changing one thing
+     * on each of those components. Changing two different things on two different components. So this still needed to take in two
+     * things from the body which is content and published.
+     */
+  } else if (req.method === "PUT") {
+    const { content, published } = req.body;
+    const currentPost = await prisma.post.findUnique({
+      where: {
+        id: postId,
+      },
+    });
+    const updatedPost = await prisma.post.update({
+      where: { id: postId },
+      data: {
+        content: content || currentPost.content,
+        published: published || currentPost.published,
+      },
+    });
+    res.json(updatedPost);
   } else {
     throw new Error(
       `The HTTP ${req.method} method is not supported at this route.`
