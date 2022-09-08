@@ -8,6 +8,8 @@ import prisma from "../../lib/prisma";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Link from "next/link";
+import { TbTrash, TbDotsVertical } from "react-icons/tb";
+import { Popover, Transition } from "@headlessui/react";
 import {
   HiTrash,
   HiBan,
@@ -15,6 +17,7 @@ import {
   HiOutlineDotsHorizontal,
 } from "react-icons/hi";
 import { TbArrowLeft, TbSend } from "react-icons/tb";
+import DeleteModal from "../../components/DeleteModal";
 
 /**
  * this page used `getServerSideProps` (SSR) instead of `getStaticProps` (SSG).
@@ -140,6 +143,7 @@ const Post: React.FC<PostProps> = (props) => {
   const [viewEditComment, setViewEditcomment] = useState(false);
   const [viewComment, setViewComment] = useState(false);
   const { data: session, status } = useSession();
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 
   if (status === "loading") {
     return <div>Authenticating ...</div>;
@@ -151,6 +155,10 @@ const Post: React.FC<PostProps> = (props) => {
   if (!props.published) {
     title = `${title} (Draft)`;
   }
+
+  const closeModal = (): void => {
+    setShowDeleteModal(false);
+  };
 
   const addComment = async (e: React.SyntheticEvent) => {
     // const submitData: React.FormEventHandler<HTMLFormElement> = async (e) => {
@@ -175,6 +183,7 @@ const Post: React.FC<PostProps> = (props) => {
     await fetch(`/api/comment/${id}`, {
       method: "DELETE",
     });
+    setShowDeleteModal(false);
     Router.push(`/p/${props.id}`);
   }
 
@@ -251,17 +260,58 @@ const Post: React.FC<PostProps> = (props) => {
             ? props.comments.map((comment) => {
                 return (
                   <div className="pb-[18px]">
-                    <div className="flex items-center pb-[12px]">
-                      <img
-                        src={comment.user.image}
-                        className="rounded-full w-[30px] h-[30px]"
-                      />
-                      <h3 className="px-[8px] font-[600] text-[14px]">
-                        {comment.user.name}
-                      </h3>
-                      <p className="font-[400] text-[14px] text-[#737373]">
-                        {"@" + comment.user.username}
-                      </p>
+                    <div className="flex justify-between">
+                      <div className="flex items-center pb-[12px]">
+                        <img
+                          src={comment.user.image}
+                          className="rounded-full w-[30px] h-[30px]"
+                        />
+                        <h3 className="px-[8px] font-[600] text-[14px]">
+                          {comment.user.name}
+                        </h3>
+                        <p className="font-[400] text-[14px] text-[#737373]">
+                          {"@" + comment.user.username}
+                        </p>
+                      </div>
+                      {session && session.user.id === comment.user.id ? (
+                        // <div className="flex items-start justify-end">
+                        <Popover className="relative">
+                          <Popover.Button className="outline-none">
+                            <TbDotsVertical />
+                          </Popover.Button>
+                          <Transition
+                            enter="transition duration-300 ease-out"
+                            enterFrom="transform scale-95 opacity-0"
+                            enterTo="transform scale-100 opacity-100"
+                            leave="transition duration-300 ease-out"
+                            leaveFrom="transform scale-100 opacity-100"
+                            leaveTo="transform scale-95 opacity-0"
+                          >
+                            <Popover.Panel
+                              static
+                              className="absolute z-10 rounded-[8px] w-[163px] h-[32px] bg-[#FFFFFF] shadow-xl right-[4px]"
+                            >
+                              <div className="flex flex-col w-full h-full ">
+                                {/* <div className="flex items-center justify-start  w-full h-full p-[2px]"></div>
+                                <div className="border-b border-[#FFD8D8]"></div>
+                                <div className="flex items-center justify-start  w-full h-full p-[2px]"></div>
+                                <div className="border-b border-[#FFD8D8]"></div> */}
+                                <div className="flex items-center justify-start w-full h-full p-[2px]">
+                                  <button
+                                    onClick={() => setShowDeleteModal(true)}
+                                    className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
+                                  >
+                                    <div className="pr-[9.11px]">
+                                      <TbTrash />
+                                    </div>
+                                    Delete
+                                  </button>
+                                </div>
+                              </div>
+                            </Popover.Panel>
+                          </Transition>
+                        </Popover>
+                      ) : null}
                     </div>
                     <p>{comment.content}</p>
                     {session && session.user.id === comment.user.id ? (
@@ -302,6 +352,12 @@ const Post: React.FC<PostProps> = (props) => {
                         )} */}
                       </>
                     ) : null}
+                    <DeleteModal
+                      visible={showDeleteModal}
+                      onClose={closeModal}
+                      onDelete={() => deleteComment(comment.id)}
+                      name={"comment"}
+                    />
                   </div>
                 );
               })

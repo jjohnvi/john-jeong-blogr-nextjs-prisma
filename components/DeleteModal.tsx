@@ -4,9 +4,9 @@ import { TbCircleX } from "react-icons/tb";
 const DeleteModal: React.FC<{
   visible: boolean;
   onClose: () => void;
-  deletePost: (postId) => void;
-  postId: string;
-}> = ({ visible, onClose, deletePost, postId }) => {
+  onDelete: () => void;
+  name: string;
+}> = ({ visible, onClose, onDelete, name }) => {
   if (!visible) return null;
 
   return (
@@ -35,7 +35,7 @@ const DeleteModal: React.FC<{
           Are you sure?
         </h1>
         <p className="text-[14px] font-[400] text-[#737373] text-center">
-          Do you really want to delete this post?
+          Do you really want to delete this {name}?
         </p>
         <div className="flex justify-between w-full mt-8 gap-5">
           <button
@@ -45,7 +45,7 @@ const DeleteModal: React.FC<{
             Cancel
           </button>
           <button
-            onClick={() => deletePost(postId)}
+            onClick={onDelete}
             className="flex-1 h-[40px] bg-[#FF7070] rounded-[8px] text-[#FFEAEA] font-[700] text-[20px]"
           >
             Delete

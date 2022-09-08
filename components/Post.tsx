@@ -45,6 +45,7 @@ export type PostProps = {
 
 const Post: React.FC<{ post: PostProps }> = ({ post }) => {
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [publish, setPublish] = useState<boolean>(post.published);
   const router = useRouter();
   const { data: session, status } = useSession();
   const isActive: (pathname: String) => boolean = (pathname) =>
@@ -60,6 +61,18 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
     } else if (isActive("/drafts")) {
       Router.push("/drafts");
     }
+  }
+
+  async function publishPost(id: string): Promise<void> {
+    // setPublish(true);
+    await axios.put(`/api/post/${id}`, { published: !post.published });
+    Router.push("/drafts");
+  }
+
+  async function unpublishPost(id: string): Promise<void> {
+    // setPublish(false);
+    console.log("unpublishfired");
+    await axios.put(`api/post/${id}`, { published: false });
   }
 
   const likePost = async (postId): Promise<void> => {
@@ -111,7 +124,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
 
   // console.log(likeId);
   // console.log(isPostLiked);
-  // console.log(post);
+
   return (
     <div className="py-4">
       <div className="flex items-center justify-between">
@@ -151,9 +164,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
                         {!post.published ? (
                           <button
                             className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
-                            onClick={() =>
-                              Router.push("/u/[id]", `/u/${post.id}`)
-                            }
+                            onClick={() => publishPost(post.id)}
                           >
                             <div className="pr-[9.11px]">
                               <TbFileExport />
@@ -163,9 +174,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
                         ) : (
                           <button
                             className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
-                            onClick={() =>
-                              Router.push("/u/[id]", `/u/${post.id}`)
-                            }
+                            onClick={() => publishPost(post.id)}
                           >
                             <div className="pr-[9.11px]">
                               <TbFileSymlink />
@@ -248,7 +257,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
                     {!post.published ? (
                       <button
                         className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
-                        onClick={() => Router.push("/u/[id]", `/u/${post.id}`)}
+                        onClick={() => publishPost(post.id)}
                       >
                         <div className="pr-[9.11px]">
                           <TbFileExport />
@@ -258,7 +267,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
                     ) : (
                       <button
                         className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
-                        onClick={() => Router.push("/u/[id]", `/u/${post.id}`)}
+                        onClick={() => publishPost(post.id)}
                       >
                         <div className="pr-[9.11px]">
                           <TbFileSymlink />
@@ -343,8 +352,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
       <DeleteModal
         onClose={closeModal}
         visible={showDeleteModal}
-        deletePost={deletePost}
-        postId={post.id}
+        onDelete={() => deletePost(post.id)}
       />
     </div>
   );

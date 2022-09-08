@@ -18,6 +18,7 @@ export default async function handle(req, res) {
      */
   } else if (req.method === "PUT") {
     const { content, published } = req.body;
+    console.log(typeof published);
     const currentPost = await prisma.post.findUnique({
       where: {
         id: postId,
@@ -27,7 +28,7 @@ export default async function handle(req, res) {
       where: { id: postId },
       data: {
         content: content || currentPost.content,
-        published: published || currentPost.published,
+        published: published !== undefined ? published : currentPost.published,
       },
     });
     res.json(updatedPost);

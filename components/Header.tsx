@@ -144,11 +144,11 @@ const Header: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex flex-col w-full">
-                    <div className="flex items-center w-full h-full leading-none rounded-[6px] p-[4px]">
+                    {/* <div className="flex items-center w-full h-full leading-none rounded-[6px] p-[4px]">
                       <button className="h-[58px] rounded-[6px] w-full  hover:bg-[#FFD8D8] ease-in duration-300 text-start p-3">
                         <a>Add an existing account</a>
                       </button>
-                    </div>
+                    </div> */}
                     <div className="flex items-center w-full h-full leading-none rounded-[6px] p-[4px]">
                       <button
                         className="h-[58px] rounded-[6px] w-full  hover:bg-[#FFD8D8] ease-in duration-300 text-start p-3"
