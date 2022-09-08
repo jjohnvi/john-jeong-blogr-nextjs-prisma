@@ -110,7 +110,7 @@ const Header: React.FC = () => {
       <div className="flex justify-start items-center h-20 w-full">
         <div className="relative w-12 h-12">
           <Popover className="relative">
-            <Popover.Button className="outline-none">
+            <Popover.Button className="outline-1 rounded-full outline-[#2D2D2D] p-[1px]">
               <img
                 src={session.user.image}
                 className="rounded-full border border-gray-100 shadow-sm w-12 outline-none"
@@ -126,13 +126,13 @@ const Header: React.FC = () => {
             >
               <Popover.Panel
                 static
-                className="absolute z-10 rounded-[16px] w-[300px] h-[202px] bg-[#FFEAEA] p-[16px] shadow-xl"
+                className="absolute z-10 rounded-[8px] w-[300px] h-[202px] bg-[#FFFCFC] shadow-xl"
               >
-                <div className="grid grid-cols-1">
-                  <div className="flex border-b border-[#FFD8D8] w-full pb-[13px]">
+                <div className="flex flex-col h-full">
+                  <div className="flex border-b border-[#FFD8D8] w-full h-full items-center pl-[16px]">
                     <img
                       src={session.user.image}
-                      className="rounded-full border border-gray-100 shadow-sm w-12"
+                      className="rounded-full border border-gray-100 shadow-sm w-12 h-12"
                     />
                     <div className="pl-[14px]">
                       <h1 className="font-[500] text-[17px] text-[#2D2D2D]">
@@ -143,11 +143,20 @@ const Header: React.FC = () => {
                       </h3>
                     </div>
                   </div>
-                  <div className="pt-[17px]"></div>
-                  <div className="flex justify-start items-center hover:scale-105 hover:text-[16px] hover:rounded-full ease-in duration-300 w-full">
-                    <button className="" onClick={() => signOut()}>
-                      <a>{"Log out @" + session.user.username}</a>
-                    </button>
+                  <div className="flex flex-col w-full">
+                    <div className="flex items-center w-full h-full leading-none rounded-[6px] p-[4px]">
+                      <button className="h-[58px] rounded-[6px] w-full  hover:bg-[#FFD8D8] ease-in duration-300 text-start p-3">
+                        <a>Add an existing account</a>
+                      </button>
+                    </div>
+                    <div className="flex items-center w-full h-full leading-none rounded-[6px] p-[4px]">
+                      <button
+                        className="h-[58px] rounded-[6px] w-full  hover:bg-[#FFD8D8] ease-in duration-300 text-start p-3"
+                        onClick={() => signOut()}
+                      >
+                        <a>{"Log out @" + session.user.username}</a>
+                      </button>
+                    </div>
                   </div>
                 </div>
 

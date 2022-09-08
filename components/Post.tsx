@@ -9,6 +9,8 @@ import {
   TbBrandHipchat,
   TbDotsVertical,
   TbPencil,
+  TbFileExport,
+  TbFileSymlink,
 } from "react-icons/tb";
 import { useSession } from "next-auth/react";
 import axios from "axios";
@@ -142,9 +144,37 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
                 >
                   <Popover.Panel
                     static
-                    className="absolute z-10 rounded-[8px] w-[163px] h-[64px] bg-[#FFFFFF] shadow-xl right-[4px]"
+                    className="absolute z-10 rounded-[8px] w-[163px] h-[95px] bg-[#FFFFFF] shadow-xl right-[4px]"
                   >
                     <div className="flex flex-col w-full h-full ">
+                      <div className="flex items-center justify-start  w-full h-full p-[2px]">
+                        {!post.published ? (
+                          <button
+                            className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
+                            onClick={() =>
+                              Router.push("/u/[id]", `/u/${post.id}`)
+                            }
+                          >
+                            <div className="pr-[9.11px]">
+                              <TbFileExport />
+                            </div>
+                            Publish
+                          </button>
+                        ) : (
+                          <button
+                            className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
+                            onClick={() =>
+                              Router.push("/u/[id]", `/u/${post.id}`)
+                            }
+                          >
+                            <div className="pr-[9.11px]">
+                              <TbFileSymlink />
+                            </div>
+                            Unpublish
+                          </button>
+                        )}
+                      </div>
+                      <div className="border-b border-[#FFD8D8]"></div>
                       <div className="flex items-center justify-start  w-full h-full p-[2px]">
                         <button
                           className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
@@ -155,7 +185,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
                           <div className="pr-[9.11px]">
                             <TbPencil />
                           </div>
-                          edit
+                          Edit
                         </button>
                       </div>
                       <div className="border-b border-[#FFD8D8]"></div>
@@ -167,7 +197,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
                           <div className="pr-[9.11px]">
                             <TbTrash />
                           </div>
-                          delete
+                          Delete
                         </button>
                       </div>
                     </div>
@@ -211,9 +241,33 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
             >
               <Popover.Panel
                 static
-                className="absolute z-10 rounded-[8px] w-[163px] h-[64px] bg-[#FFFFFF] shadow-xl right-[4px]"
+                className="absolute z-10 rounded-[8px] w-[163px] h-[95px] bg-[#FFFFFF] shadow-xl right-[4px]"
               >
                 <div className="flex flex-col w-full h-full ">
+                  <div className="flex items-center justify-start  w-full h-full p-[2px]">
+                    {!post.published ? (
+                      <button
+                        className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
+                        onClick={() => Router.push("/u/[id]", `/u/${post.id}`)}
+                      >
+                        <div className="pr-[9.11px]">
+                          <TbFileExport />
+                        </div>
+                        Publish
+                      </button>
+                    ) : (
+                      <button
+                        className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
+                        onClick={() => Router.push("/u/[id]", `/u/${post.id}`)}
+                      >
+                        <div className="pr-[9.11px]">
+                          <TbFileSymlink />
+                        </div>
+                        Unpublish
+                      </button>
+                    )}
+                  </div>
+                  <div className="border-b border-[#FFD8D8]"></div>
                   <div className="flex items-center justify-start  w-full h-full p-[2px]">
                     <button
                       className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
@@ -222,7 +276,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
                       <div className="pr-[9.11px]">
                         <TbPencil />
                       </div>
-                      edit
+                      Edit
                     </button>
                   </div>
                   <div className="border-b border-[#FFD8D8]"></div>
@@ -234,7 +288,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
                       <div className="pr-[9.11px]">
                         <TbTrash />
                       </div>
-                      delete
+                      Delete
                     </button>
                   </div>
                 </div>

@@ -216,12 +216,12 @@ const Post: React.FC<PostProps> = (props) => {
       <div className="p-4">
         <div className="border-b border- border-[#FFD8D8] w-full pb-[24px]">
           <div className="flex justify-between items-center w-6/12 pb-[45px]">
-            <div
+            <button
               className="font-[400] text-[26px]"
               onClick={() => Router.push("/")}
             >
               <TbArrowLeft />
-            </div>
+            </button>
             <h1 className="text-[20px] font-[400]">Comments</h1>
           </div>
           <div className="flex items-center pb-[12px]">
@@ -318,7 +318,7 @@ const Post: React.FC<PostProps> = (props) => {
               />
               <input
                 maxLength={255}
-                className="border-none bg-[#FFFAFA w-full h-[62px] flex justify-center items-center outline-none resize-none p-[14px]"
+                className="border-none bg-[#FFFAFA w-full h-[62px] flex justify-center items-center outline-none resize-none p-[14px] text-[14px] font-[500] placeholder-[#BAB8B8]"
                 value={comment}
                 placeholder={`Comment as ${session.user.name}...`}
                 onChange={(e) => setComment(e.target.value)}

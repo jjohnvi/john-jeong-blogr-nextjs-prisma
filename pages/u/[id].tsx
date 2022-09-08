@@ -62,12 +62,12 @@ const updatePost: React.FC<PostProps> = (props) => {
         <div className="border-b border-[#FFD8D8] w-full pb-[24px]">
           <div className="flex">
             <div className="flex gap-7 items-center w-6/12 pb-[45px]">
-              <div
+              <button
                 className="font-[400] text-[26px]"
                 onClick={() => Router.push("/")}
               >
                 <TbX />
-              </div>
+              </button>
               <h1 className="text-[20px] font-[400]">Edit</h1>
             </div>
             <button
