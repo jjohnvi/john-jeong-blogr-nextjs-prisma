@@ -126,7 +126,7 @@ const Header: React.FC = () => {
             >
               <Popover.Panel
                 static
-                className="absolute z-10 rounded-[8px] w-[300px] h-[202px] bg-[#FFFCFC] shadow-xl"
+                className="absolute z-10 rounded-[8px] w-[300px] h-[130px] bg-[#FFFCFC] shadow-xl"
               >
                 <div className="flex flex-col h-full">
                   <div className="flex border-b border-[#FFD8D8] w-full h-full items-center pl-[16px]">
