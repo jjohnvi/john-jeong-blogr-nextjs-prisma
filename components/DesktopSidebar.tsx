@@ -20,13 +20,13 @@ const DesktopSidebar: React.FC = () => {
   return (
     <div className="flex flex-col justify-between w-[290px] min-h-screen p-4">
       <div className="">
-        <div>
+        <div className="flex items-center text-[24px] font-[700] text-[#CA7474]">
           <TbMoodCrazyHappy />
         </div>
-        <div className="flex justify-center items-center">
+        <div className="flex items-center text-[24px] font-[700]">
           <TbSmartHome /> Feed
         </div>
-        <div className="flex justify-center items-center">
+        <div className="flex items-center text-[24px] font-[700]">
           <TbFilePencil />
           My drafts
         </div>
@@ -37,8 +37,10 @@ const DesktopSidebar: React.FC = () => {
           className="w-[46px] h-[46px] rounded-full"
         />
         <div>
-          <div>{session.user.name}</div>
-          <div>{"@" + session.user.username}</div>
+          <div className="font-[700] text-[17px]">{session.user.name}</div>
+          <div className="text-[#737373] text-[15px] font-[400]">
+            {"@" + session.user.username}
+          </div>
         </div>
       </div>
     </div>
