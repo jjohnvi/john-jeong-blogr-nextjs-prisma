@@ -76,7 +76,7 @@ const Header: React.FC = () => {
   if (session) {
     toggle = (
       // <div className="w-full flex justify-center h-9">
-      <div className="bg-[#FFFAFA] flex justify-center w-full p-[1px] rounded-[10px] border border-red-200 h-[34px]">
+      <div className="bg-[#FFFAFA] flex justify-center w-full p-[1px] rounded-[10px] border border-red-200 h-[34px] lg:hidden">
         <div className="flex justify-center items-center w-full">
           <Link href="/">
             <a
