@@ -3,6 +3,12 @@ import { Popover, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
+import {
+  TbMoodCrazyHappy,
+  TbSmartHome,
+  TbFilePencil,
+  TbFile,
+} from "react-icons/tb";
 
 const DesktopSidebar: React.FC = () => {
   const router = useRouter();
@@ -14,9 +20,16 @@ const DesktopSidebar: React.FC = () => {
   return (
     <div className="flex flex-col justify-between w-[290px] min-h-screen p-4">
       <div className="">
-        <div>LocoMoco icon</div>
-        <div>Feed</div>
-        <div>My drafts</div>
+        <div>
+          <TbMoodCrazyHappy />
+        </div>
+        <div className="flex justify-center items-center">
+          <TbSmartHome /> Feed
+        </div>
+        <div className="flex justify-center items-center">
+          <TbFilePencil />
+          My drafts
+        </div>
       </div>
       <div className="flex justify-center">
         <img
