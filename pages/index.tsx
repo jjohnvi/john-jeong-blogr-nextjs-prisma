@@ -4,6 +4,7 @@ import Layout from "../components/Layout";
 import Post, { PostProps } from "../components/Post";
 import prisma from "../lib/prisma";
 import styled from "styled-components";
+import TextArea from "../components/TextArea";
 
 //prisma is the interface to the database when you want to read and write
 /**
@@ -61,6 +62,7 @@ const Blog: React.FC<Props> = (props) => {
       <div className="flex">
         <div className="page">
           <main>
+            <TextArea />
             {props.feed.map((post) => (
               <div
                 key={post.id}
