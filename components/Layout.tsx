@@ -14,8 +14,8 @@ const Layout: React.FC<Props> = (props) => (
     </div>
     <div className="hidden md:flex min-h-screen w-full bg-[#FFFBFB]">
       <DesktopSidebar />
-      <div className="">{props.children}</div>
-      <div></div>
+      <div className="w-[859px] border-[1px] border-x-[#FFD8D8]">{props.children}</div>
+      <div className="w-[290px] min-h-screen p-4"></div>
     </div>
   </>
 );

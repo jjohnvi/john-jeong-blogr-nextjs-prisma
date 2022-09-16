@@ -61,7 +61,7 @@ const Blog: React.FC<Props> = (props) => {
       <div className="page">
         <main>
           {props.feed.map((post) => (
-            <div key={post.id} className="px-4">
+            <div key={post.id} className="px-4 md:border-b-[1px] md:border-[#FFD8D8]">
               <Post post={post} />
             </div>
           ))}

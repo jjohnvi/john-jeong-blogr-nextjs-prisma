@@ -14,7 +14,7 @@ import {
 } from "react-icons/tb";
 import { useSession } from "next-auth/react";
 import axios from "axios";
-import { Like } from "@prisma/client";
+import {Like} from "@prisma/client"
 import { Popover, Transition } from "@headlessui/react";
 import prisma from "../lib/prisma";
 import DeleteModal from "./DeleteModal";
@@ -353,6 +353,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
         onClose={closeModal}
         visible={showDeleteModal}
         onDelete={() => deletePost(post.id)}
+        name={"post"}
       />
     </div>
   );
