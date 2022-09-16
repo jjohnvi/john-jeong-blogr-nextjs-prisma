@@ -18,16 +18,18 @@ const DesktopSidebar: React.FC = () => {
   const { data: session, status } = useSession();
 
   return (
-    <div className="flex flex-col justify-between w-[290px] min-h-screen p-4">
+    <div className="flex flex-col justify-between items-center w-[290px] min-h-screen p-4">
       <div className="">
-        <div className="flex items-center text-[24px] font-[700] text-[#CA7474]">
+        <div className="flex items-center text-[24px] font-[700] text-[#CA7474] py-4">
           <TbMoodCrazyHappy />
         </div>
-        <div className="flex items-center text-[24px] font-[700]">
-          <TbSmartHome /> Feed
+        <div className="flex items-center text-[24px] font-[700] py-4">
+         <div className="pr-5"><TbSmartHome /></div> Feed
         </div>
         <div className="flex items-center text-[24px] font-[700]">
+          <div className="pr-5">
           <TbFilePencil />
+          </div>
           My drafts
         </div>
       </div>

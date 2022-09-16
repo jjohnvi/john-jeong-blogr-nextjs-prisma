@@ -58,14 +58,24 @@ const Blog: React.FC<Props> = (props) => {
   console.log(props);
   return (
     <Layout>
-      <div className="page">
-        <main>
-          {props.feed.map((post) => (
-            <div key={post.id} className="px-4 md:border-b-[1px] md:border-[#FFD8D8]">
-              <Post post={post} />
-            </div>
-          ))}
-        </main>
+      <div className="flex">
+        <div className="page">
+          <main>
+            {props.feed.map((post) => (
+              <div
+                key={post.id}
+                className="px-4 md:border-b-[1px] md:border-[#FFD8D8]"
+              >
+                <Post post={post} />
+              </div>
+            ))}
+          </main>
+        </div>
+        <div className="hidden md:block">
+          <div className="w-[290px] min-h-screen p-4 border-l-[1px] border-[#FFD8D8]">
+            Comments
+          </div>
+        </div>
       </div>
     </Layout>
   );
