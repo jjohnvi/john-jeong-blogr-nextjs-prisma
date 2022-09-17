@@ -14,7 +14,7 @@ import {
 } from "react-icons/tb";
 import { useSession } from "next-auth/react";
 import axios from "axios";
-import {Like} from "@prisma/client"
+import { Like } from "@prisma/client";
 import { Popover, Transition } from "@headlessui/react";
 import prisma from "../lib/prisma";
 import DeleteModal from "./DeleteModal";
@@ -127,18 +127,18 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
 
   return (
     <div className="py-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center md:items-start justify-between">
         {isActive("/") && (
           <>
-            <div className="flex justify-start items-center w-full">
+            <div className="flex justify-start items-center md:items-start w-full">
               <img
                 src={post.author.image}
-                className="w-[30px] h-[30px] rounded-full"
+                className="w-[30px] h-[30px] rounded-full md:w-[50px] md:h-[50px]"
               />
-              <h2 className="font-semibold flex items-center p-[8px]">
+              <h2 className="font-semibold flex items-center p-[8px] md:p-0 md:px-[8px] md:items-start md:leading-none">
                 {authorName}
               </h2>
-              <div className="font-[400] text-[14px] text-[#737373]">
+              <div className="font-[400] text-[14px] text-[#737373] md:leading-none">
                 {"@" + post.author.username}
               </div>
             </div>

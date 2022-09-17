@@ -62,7 +62,9 @@ const Blog: React.FC<Props> = (props) => {
       <div className="flex">
         <div className="page">
           <main>
-            <TextArea />
+            <div className="hidden md:block">
+              <TextArea />
+            </div>
             {props.feed.map((post) => (
               <div
                 key={post.id}
