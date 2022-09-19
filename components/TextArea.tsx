@@ -23,7 +23,7 @@ const TextArea: React.FC = () => {
   };
 
   return (
-    <div className="p-4 border-b-[1px] border-[#FFD8D8] h-[220px]">
+    <div className="p-5 border-b-[1px] border-[#FFD8D8] h-[220px]">
       <div className="font-[700] text-[24px] py-4">Feed</div>
       <div className="flex">
         <img

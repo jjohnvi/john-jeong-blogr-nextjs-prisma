@@ -126,108 +126,168 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
   // console.log(isPostLiked);
 
   return (
-    <div className="py-4">
-      <div className="flex items-center md:items-start justify-between">
+    <div className="py-4 md:py-8">
+      <div className="flex-col items-center md:items-start justify-between">
         {isActive("/") && (
           <>
-            <div className="flex justify-start items-center md:items-start w-full">
-              <img
-                src={post.author.image}
-                className="w-[30px] h-[30px] rounded-full md:w-[50px] md:h-[50px]"
-              />
-              <h2 className="font-semibold flex items-center p-[8px] md:p-0 md:px-[8px] md:items-start md:leading-none">
-                {authorName}
-              </h2>
-              <div className="font-[400] text-[14px] text-[#737373] md:leading-none">
-                {"@" + post.author.username}
-              </div>
-            </div>
-            {session && session.user.id === post.authorId ? (
-              <Popover className="relative">
-                <Popover.Button className="outline-none">
-                  <TbDotsVertical />
-                </Popover.Button>
-                <Transition
-                  enter="transition duration-300 ease-out"
-                  enterFrom="transform scale-95 opacity-0"
-                  enterTo="transform scale-100 opacity-100"
-                  leave="transition duration-300 ease-out"
-                  leaveFrom="transform scale-100 opacity-100"
-                  leaveTo="transform scale-95 opacity-0"
-                >
-                  <Popover.Panel
-                    static
-                    className="absolute z-10 rounded-[8px] w-[163px] h-[95px] bg-[#FFFFFF] shadow-xl right-[4px]"
-                  >
-                    <div className="flex flex-col w-full h-full ">
-                      <div className="flex items-center justify-start  w-full h-full p-[2px]">
-                        {!post.published ? (
-                          <button
-                            className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
-                            onClick={() => publishPost(post.id)}
-                          >
-                            <div className="pr-[9.11px]">
-                              <TbFileExport />
-                            </div>
-                            Publish
-                          </button>
-                        ) : (
-                          <button
-                            className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
-                            onClick={() => publishPost(post.id)}
-                          >
-                            <div className="pr-[9.11px]">
-                              <TbFileSymlink />
-                            </div>
-                            Unpublish
-                          </button>
-                        )}
-                      </div>
-                      <div className="border-b border-[#FFD8D8]"></div>
-                      <div className="flex items-center justify-start  w-full h-full p-[2px]">
-                        <button
-                          className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
-                          onClick={() =>
-                            Router.push("/u/[id]", `/u/${post.id}`)
-                          }
-                        >
-                          <div className="pr-[9.11px]">
-                            <TbPencil />
-                          </div>
-                          Edit
-                        </button>
-                      </div>
-                      <div className="border-b border-[#FFD8D8]"></div>
-                      <div className="flex items-center justify-start w-full h-full p-[2px]">
-                        <button
-                          onClick={() => setShowDeleteModal(true)}
-                          className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
-                        >
-                          <div className="pr-[9.11px]">
-                            <TbTrash />
-                          </div>
-                          Delete
-                        </button>
+            <div className="flex justify-between items-center md:items-start w-full">
+              <div className="flex justify-start items-center md:items-start w-full">
+                <img
+                  src={post.author.image}
+                  className="w-[30px] h-[30px] rounded-full md:w-[50px] md:h-[50px]"
+                />
+                <div className="md:pl-3">
+                  <div>
+                    <div className="flex items-center md:items-start md:pb-2 md:leading-none">
+                      <h2 className="font-semibold flex items-center p-[8px] md:p-0 md:pr-[8px] md:items-start md:leading-none">
+                        {authorName}
+                      </h2>
+                      <div className="font-[400] text-[14px] text-[#737373] md:leading-none">
+                        {"@" + post.author.username}
                       </div>
                     </div>
-                  </Popover.Panel>
-                </Transition>
-              </Popover>
-            ) : null}
+                    <div
+                      className="text-[14px] hidden md:block"
+                      onClick={() => Router.push("/p/[id]", `/p/${post.id}`)}
+                    >
+                      <ReactMarkdown children={post.content} />
+                    </div>
+                  </div>
+
+                  {isActive("/") && (
+                    <div className="pt-4 items-center hidden md:flex">
+                      {!isPostLiked ? (
+                        <div className="hidden md:flex md:w-[110px] md:justify-start">
+                          <div
+                            onClick={() => likePost(post.id)}
+                            className="flex items-center text-[17px]"
+                          >
+                            <div>
+                              <TbHeart />
+                            </div>
+                            {post?._count?.likes !== 0 ? (
+                              <div className="px-[3px]">
+                                {post?._count?.likes}
+                              </div>
+                            ) : null}
+                          </div>
+                        </div>
+                      ) : (
+                        isPostLiked && (
+                          <>
+                            <div className="hidden md:flex md:w-[110px] md:justify-start">
+                              <div
+                                onClick={() => deleteLike(post.id)}
+                                className="flex items-center text-[17px]"
+                              >
+                                <div className="">
+                                  <TbHeart className="fill-[#FF7070]" />
+                                </div>
+                                {post?._count?.likes !== 0 ? (
+                                  <div className="px-[3px]">
+                                    {post?._count?.likes}
+                                  </div>
+                                ) : null}
+                              </div>
+                            </div>
+                          </>
+                        )
+                      )}
+                      <div className="flex items-center text-[17px]">
+                        <div className="pr-[3px]">
+                          <TbBrandHipchat />
+                        </div>
+                        {post?._count?.comments !== 0
+                          ? post?._count?.comments
+                          : null}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {session && session.user.id === post.authorId ? (
+                <Popover className="relative">
+                  <Popover.Button className="outline-none justify-end md:pb-2">
+                    <TbDotsVertical />
+                  </Popover.Button>
+                  <Transition
+                    enter="transition duration-300 ease-out"
+                    enterFrom="transform scale-95 opacity-0"
+                    enterTo="transform scale-100 opacity-100"
+                    leave="transition duration-300 ease-out"
+                    leaveFrom="transform scale-100 opacity-100"
+                    leaveTo="transform scale-95 opacity-0"
+                  >
+                    <Popover.Panel
+                      static
+                      className="absolute z-10 rounded-[8px] w-[163px] h-[95px] bg-[#FFFFFF] shadow-xl right-[4px]"
+                    >
+                      <div className="flex flex-col w-full h-full ">
+                        <div className="flex items-center justify-start  w-full h-full p-[2px]">
+                          {!post.published ? (
+                            <button
+                              className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
+                              onClick={() => publishPost(post.id)}
+                            >
+                              <div className="pr-[9.11px]">
+                                <TbFileExport />
+                              </div>
+                              Publish
+                            </button>
+                          ) : (
+                            <button
+                              className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
+                              onClick={() => publishPost(post.id)}
+                            >
+                              <div className="pr-[9.11px]">
+                                <TbFileSymlink />
+                              </div>
+                              Unpublish
+                            </button>
+                          )}
+                        </div>
+                        <div className="border-b border-[#FFD8D8]"></div>
+                        <div className="flex items-center justify-start  w-full h-full p-[2px]">
+                          <button
+                            className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
+                            onClick={() =>
+                              Router.push("/u/[id]", `/u/${post.id}`)
+                            }
+                          >
+                            <div className="pr-[9.11px]">
+                              <TbPencil />
+                            </div>
+                            Edit
+                          </button>
+                        </div>
+                        <div className="border-b border-[#FFD8D8]"></div>
+                        <div className="flex items-center justify-start w-full h-full p-[2px]">
+                          <button
+                            onClick={() => setShowDeleteModal(true)}
+                            className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
+                          >
+                            <div className="pr-[9.11px]">
+                              <TbTrash />
+                            </div>
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </Popover.Panel>
+                  </Transition>
+                </Popover>
+              ) : null}
+            </div>
+            <div
+              className="text-[14px] md:hidden"
+              onClick={() => Router.push("/p/[id]", `/p/${post.id}`)}
+            >
+              <ReactMarkdown children={post.content} />
+            </div>
           </>
         )}
         {/* <div className="mb-2 flex justify-between w-full"> */}
-        {isActive("/drafts") && (
-          <div className="">
-            {post.published && (
-              <div className="mb-2 flex justify-between w-full">
-                <div className="flex justify-center items-center rounded-[16px] w-[100px] h-[32px] bg-[#FF7070] p-[8px] text-[#FFFAFA] text-[14px]">
-                  Pubished
-                </div>
-              </div>
-            )}
-          </div>
-        )}
         {!post.published && (
           <div className="mb-2 flex justify-between w-full">
             <div className="flex justify-center items-center rounded-[16px] w-[100px] h-[32px] bg-[#D9D9D9] p-[8px] text-[14px]">
@@ -235,83 +295,9 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
             </div>
           </div>
         )}
-        {session && isActive("/drafts") && session.user.id === post.authorId ? (
-          <Popover className="relative">
-            <Popover.Button className="outline-none">
-              <TbDotsVertical />
-            </Popover.Button>
-            <Transition
-              enter="transition duration-300 ease-out"
-              enterFrom="transform scale-95 opacity-0"
-              enterTo="transform scale-100 opacity-100"
-              leave="transition duration-300 ease-out"
-              leaveFrom="transform scale-100 opacity-100"
-              leaveTo="transform scale-95 opacity-0"
-            >
-              <Popover.Panel
-                static
-                className="absolute z-10 rounded-[8px] w-[163px] h-[95px] bg-[#FFFFFF] shadow-xl right-[4px]"
-              >
-                <div className="flex flex-col w-full h-full ">
-                  <div className="flex items-center justify-start  w-full h-full p-[2px]">
-                    {!post.published ? (
-                      <button
-                        className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
-                        onClick={() => publishPost(post.id)}
-                      >
-                        <div className="pr-[9.11px]">
-                          <TbFileExport />
-                        </div>
-                        Publish
-                      </button>
-                    ) : (
-                      <button
-                        className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
-                        onClick={() => publishPost(post.id)}
-                      >
-                        <div className="pr-[9.11px]">
-                          <TbFileSymlink />
-                        </div>
-                        Unpublish
-                      </button>
-                    )}
-                  </div>
-                  <div className="border-b border-[#FFD8D8]"></div>
-                  <div className="flex items-center justify-start  w-full h-full p-[2px]">
-                    <button
-                      className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
-                      onClick={() => Router.push("/u/[id]", `/u/${post.id}`)}
-                    >
-                      <div className="pr-[9.11px]">
-                        <TbPencil />
-                      </div>
-                      Edit
-                    </button>
-                  </div>
-                  <div className="border-b border-[#FFD8D8]"></div>
-                  <div className="flex items-center justify-start w-full h-full p-[2px]">
-                    <button
-                      onClick={() => setShowDeleteModal(true)}
-                      className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
-                    >
-                      <div className="pr-[9.11px]">
-                        <TbTrash />
-                      </div>
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              </Popover.Panel>
-            </Transition>
-          </Popover>
-        ) : null}
-        {/* </div> */}
-      </div>
-      <div onClick={() => Router.push("/p/[id]", `/p/${post.id}`)}>
-        <ReactMarkdown children={post.content} />
       </div>
       {isActive("/") && (
-        <div className="flex pt-4 items-center">
+        <div className="flex pt-4 items-center md:hidden">
           {!isPostLiked ? (
             <div
               onClick={() => likePost(post.id)}

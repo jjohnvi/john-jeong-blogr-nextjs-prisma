@@ -2,8 +2,9 @@ import React from "react";
 import { GetServerSideProps } from "next";
 import { useSession, getSession } from "next-auth/react";
 import Layout from "../components/Layout";
-import Post, { PostProps } from "../components/Post";
+import DraftPost, { PostProps } from "../components/DraftPost";
 import prisma from "../lib/prisma";
+import TextArea from "../components/TextArea";
 
 /**
  * getServerSideProps only runs on server-side and never runs on the browser. If a page uses getServerSideProps then:
@@ -37,6 +38,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       author: {
         select: { name: true, email: true, image: true },
       },
+      _count: {
+        select: { comments: true, likes: true },
+      },
+      likes: true,
     },
   });
   return {
@@ -65,9 +70,15 @@ const Drafts = (props: Props) => {
     <Layout>
       <div className="page">
         <main>
+          <div className="hidden md:block">
+            <TextArea />
+          </div>
           {props.drafts.map((post) => (
-            <div key={post.id} className="px-4">
-              <Post post={post} />
+            <div
+              key={post.id}
+              className="px-4 md:border-b-[1px] md:border-[#FFD8D8] md:px-5"
+            >
+              <DraftPost post={post} />
             </div>
           ))}
         </main>
