@@ -60,7 +60,7 @@ const DesktopSidebar: React.FC = () => {
           >
             <Popover.Panel
               static
-              className="absolute z-10 rounded-[8px] w-[254px] h-[194px] bg-[#FFEAEA] shadow-xl bottom-[112px]"
+              className="absolute z-10 rounded-[8px] w-[254px] h-[140px] bg-[#FFEAEA] shadow-xl bottom-[75px]"
             >
               <div className="flex flex-col h-full">
                 <div className="flex border-b border-[#FFD8D8] w-full h-[84px] items-center pl-[16px]">
