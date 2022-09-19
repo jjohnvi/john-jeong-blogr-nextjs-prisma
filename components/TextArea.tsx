@@ -5,14 +5,28 @@ import Router from "next/router";
 
 const TextArea: React.FC = () => {
   const [newPost, setNewPost] = useState<string>("");
+  const [publishPost, setPublishPost] = useState<boolean>();
   const { data: session, status } = useSession();
 
   const submitPost = async (e: React.SyntheticEvent) => {
     // const submitData: React.FormEventHandler<HTMLFormElement> = async (e) => {
     // console.log(e);
     e.preventDefault();
-    axios.post(`/api/post`, {
+    await axios.post(`/api/post`, {
       content: newPost,
+      published: true,
+    });
+    await Router.push("/");
+    resetPost();
+  };
+
+  const submitDraft = async (e: React.SyntheticEvent) => {
+    // const submitData: React.FormEventHandler<HTMLFormElement> = async (e) => {
+    // console.log(e);
+    e.preventDefault();
+    await axios.post(`/api/post`, {
+      content: newPost,
+      published: false,
     });
     await Router.push("/drafts");
     resetPost();
@@ -39,10 +53,16 @@ const TextArea: React.FC = () => {
         />
       </div>
       <div className="flex justify-end items-center">
-        <button className="text-[14px] font-[700] text-[#CA7474] pr-4">
+        <button
+          onClick={submitDraft}
+          className="text-[14px] font-[700] text-[#CA7474] pr-4"
+        >
           Save as draft
         </button>
-        <button className="rounded-[30px] bg-[#FFD8D8] w-[136px] h-[39px] text-[17px] font-[700]">
+        <button
+          onClick={submitPost}
+          className="rounded-[30px] bg-[#FFD8D8] w-[136px] h-[39px] text-[17px] font-[700]"
+        >
           Publish
         </button>
       </div>

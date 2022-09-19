@@ -233,11 +233,11 @@ const DraftPost: React.FC<{ post: PostProps }> = ({ post }) => {
                   onClick={() => deleteLike(post.id)}
                   className="flex items-center text-[17px]"
                 >
-                  <div className="">
+                  <div className="pr-[3px]">
                     <TbHeart className="fill-[#FF7070]" />
                   </div>
                   {post?._count?.likes !== 0 ? (
-                    <div className="px-[3px]">{post?._count?.likes}</div>
+                    <div className="">{post?._count?.likes}</div>
                   ) : null}
                 </div>
               </div>
@@ -246,7 +246,7 @@ const DraftPost: React.FC<{ post: PostProps }> = ({ post }) => {
         )}
         <div className="hidden md:flex w-[80px] justify-start">
           <div className="flex items-center text-[17px]">
-            <div className="">
+            <div className="pr-[3px]">
               <TbBrandHipchat />
             </div>
             {post?._count?.comments !== 0 ? post?._count?.comments : null}
