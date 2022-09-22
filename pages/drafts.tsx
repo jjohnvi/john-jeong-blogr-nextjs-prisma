@@ -68,7 +68,7 @@ const Drafts = (props: Props) => {
 
   return (
     <Layout>
-      <div className="page">
+      <div className="page overflow-y-auto">
         <main>
           <div className="hidden md:block">
             <TextArea />

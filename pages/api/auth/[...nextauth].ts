@@ -13,7 +13,7 @@ const options = {
   callbacks: {
     session: async ({ session, user }) => {
       // console.log(session);
-      console.log(user);
+      // console.log(user);
       return {
         ...session,
         user,

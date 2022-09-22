@@ -21,7 +21,7 @@ const DesktopSidebar: React.FC = () => {
 
   return (
     <div className="flex flex-col justify-between items-center w-[290px] min-h-screen p-4">
-      <div className="">
+      <div className="fixed top-3">
         <div className="flex items-center text-[24px] font-[700] text-[#CA7474] py-4">
           <TbMoodCrazyHappy />
         </div>
@@ -42,7 +42,7 @@ const DesktopSidebar: React.FC = () => {
           </div>
         </Link>
       </div>
-      <div className="flex justify-center items-center pb-[20px]">
+      <div className="flex justify-center items-center pb-[20px] fixed bottom-1">
         <Popover className="relative">
           <Popover.Button className="outline-1 rounded-full outline-[#2D2D2D] p-[1px]">
             <img

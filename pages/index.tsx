@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { GetStaticProps } from "next";
 import Layout from "../components/Layout";
 import Post, { PostProps } from "../components/Post";
 import prisma from "../lib/prisma";
 import styled from "styled-components";
 import TextArea from "../components/TextArea";
+import DesktopComments from "../components/DesktopComments";
 
 //prisma is the interface to the database when you want to read and write
 /**
@@ -56,11 +57,23 @@ type Props = {
  */
 
 const Blog: React.FC<Props> = (props) => {
+  const [selectedPostId, setSelectedPostId] = useState<string>("");
+  const [viewComments, setViewComments] = useState<boolean>(false);
+
+  const clickPost = (id): void => {
+    setSelectedPostId(id);
+    setViewComments(true);
+  };
+
+  const handleView = (): void => {
+    setViewComments(!viewComments);
+  };
+  console.log(selectedPostId);
   console.log(props);
   return (
     <Layout>
       <div className="flex">
-        <div className="page">
+        <div className="page overflow-y-auto">
           <main>
             <div className="hidden md:block">
               <TextArea />
@@ -70,14 +83,30 @@ const Blog: React.FC<Props> = (props) => {
                 key={post.id}
                 className="px-4 md:px-5 md:border-b-[1px] md:border-[#FFD8D8]"
               >
-                <Post post={post} />
+                <Post
+                  post={post}
+                  savePostId={() => setSelectedPostId(post.id)}
+                  viewComments={() => setViewComments(!viewComments)}
+                  clickPost={() => clickPost(post.id)}
+                />
               </div>
             ))}
           </main>
         </div>
         <div className="hidden md:block">
-          <div className="w-[290px] min-h-screen p-4 border-l-[1px] border-[#FFD8D8]">
-            Comments
+          <div
+            className={
+              viewComments
+                ? "w-[465px] min-h-screen p-4 border-l-[1px] border-[#FFD8D8]"
+                : "w-[290px] min-h-screen p-4 border-l-[1px] border-[#FFD8D8]"
+            }
+          >
+            {viewComments ? (
+              <DesktopComments
+                postId={selectedPostId}
+                closeComments={() => setViewComments(false)}
+              />
+            ) : null}
           </div>
         </div>
       </div>

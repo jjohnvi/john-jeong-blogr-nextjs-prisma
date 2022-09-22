@@ -14,9 +14,8 @@ import {
 } from "react-icons/tb";
 import { useSession } from "next-auth/react";
 import axios from "axios";
-import { Like } from "@prisma/client";
+
 import { Popover, Transition } from "@headlessui/react";
-import prisma from "../lib/prisma";
 import DeleteModal from "./DeleteModal";
 
 export type PostProps = {
@@ -33,7 +32,17 @@ export type PostProps = {
   content: string;
   published: boolean;
   _count: { comments: number; likes: number };
-  likes: Like[];
+  likes: Array<{
+    content: string;
+    id: string;
+    userId: string;
+    user: {
+      name: string;
+      id: string;
+      image: string;
+      username: string;
+    };
+  }>;
 };
 
 /**
@@ -43,7 +52,12 @@ export type PostProps = {
  * When you console log post, the object of a post appears with all its properties.
  */
 
-const Post: React.FC<{ post: PostProps }> = ({ post }) => {
+const Post: React.FC<{
+  post: PostProps;
+  savePostId: () => void;
+  viewComments: () => void;
+  clickPost: () => void;
+}> = ({ post, savePostId, viewComments, clickPost }) => {
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [publish, setPublish] = useState<boolean>(post.published);
   const router = useRouter();
@@ -71,7 +85,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
 
   async function unpublishPost(id: string): Promise<void> {
     // setPublish(false);
-    console.log("unpublishfired");
+    // console.log("unpublishfired");
     await axios.put(`api/post/${id}`, { published: false });
   }
 
@@ -146,9 +160,16 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
                         {"@" + post.author.username}
                       </div>
                     </div>
+                    {/* <div
+                      className="text-[14px] hidden md:hidden"
+                      onClick={() => Router.push("/p/[id]", `/p/${post.id}`)}
+                    >
+                      <ReactMarkdown children={post.content} />
+                    </div> */}
+
                     <div
                       className="text-[14px] hidden md:block"
-                      onClick={() => Router.push("/p/[id]", `/p/${post.id}`)}
+                      onClick={clickPost}
                     >
                       <ReactMarkdown children={post.content} />
                     </div>

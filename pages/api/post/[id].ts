@@ -18,7 +18,7 @@ export default async function handle(req, res) {
      */
   } else if (req.method === "PUT") {
     const { content, published } = req.body;
-    console.log(typeof published);
+    // console.log(typeof published);
     const currentPost = await prisma.post.findUnique({
       where: {
         id: postId,
@@ -32,7 +32,25 @@ export default async function handle(req, res) {
       },
     });
     res.json(updatedPost);
-  } else {
+  } else if (req.method === "GET") {
+    const postId = req.query.id
+    // console.log(postId);
+      const post = await prisma.post.findUnique({
+        where: {
+          id: String(postId),
+        },
+        include: {
+          author: {
+            select: { name: true, email: true, image: true, username: true },
+          },
+          comments: {
+            select: {content: true, id: true, user: true },
+          }
+        },
+      });
+    
+      return res.json(post)}
+  else {
     throw new Error(
       `The HTTP ${req.method} method is not supported at this route.`
     );
