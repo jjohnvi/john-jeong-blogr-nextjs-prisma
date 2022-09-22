@@ -4,12 +4,32 @@ import { useSession, getSession } from "next-auth/react";
 import { TbX, TbSend } from "react-icons/tb";
 import Router from "next/router";
 
+interface resData {
+  author: {
+    name: string;
+    email: string;
+    image: string;
+    username: string;
+  };
+  authorId: string;
+  comments: Array<{
+    content: string;
+    id: string;
+    user: string;
+  }>;
+  content: string;
+  createdAt: string;
+  id: string;
+  published: boolean;
+}
+
 const DesktopComments: React.FC<{
   postId: string;
   closeComments: () => void;
 }> = ({ postId, closeComments }) => {
-  const [data, setData] = useState();
+  const [data, setData] = useState<resData>();
   const [comment, setComment] = useState<string>("");
+  console.log(data);
 
   /**
    * UseEffect.
