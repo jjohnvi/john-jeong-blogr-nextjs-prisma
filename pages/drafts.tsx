@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { GetServerSideProps } from "next";
 import { useSession, getSession } from "next-auth/react";
 import Layout from "../components/Layout";
 import DraftPost, { PostProps } from "../components/DraftPost";
 import prisma from "../lib/prisma";
 import TextArea from "../components/TextArea";
+import DesktopComments from "../components/DesktopComments";
 
 /**
  * getServerSideProps only runs on server-side and never runs on the browser. If a page uses getServerSideProps then:
@@ -56,6 +57,13 @@ type Props = {
 // const Drafts: React.FC<Props> = (props) => {
 const Drafts = (props: Props) => {
   const { data: session } = useSession();
+  const [selectedPostId, setSelectedPostId] = useState<string>("");
+  const [viewComments, setViewComments] = useState<boolean>(false);
+
+  const clickPost = (id) => {
+    setSelectedPostId(id);
+    setViewComments(true);
+  };
 
   if (!session) {
     return (
@@ -68,20 +76,43 @@ const Drafts = (props: Props) => {
 
   return (
     <Layout>
-      <div className="page overflow-y-auto">
-        <main>
-          <div className="hidden md:block">
-            <TextArea />
-          </div>
-          {props.drafts.map((post) => (
-            <div
-              key={post.id}
-              className="px-4 md:border-b-[1px] md:border-[#FFD8D8] md:px-5"
-            >
-              <DraftPost post={post} />
+      <div className="flex">
+        <div className="page overflow-y-auto">
+          <main>
+            <div className="hidden md:block">
+              <TextArea />
             </div>
-          ))}
-        </main>
+            {props.drafts.map((post) => (
+              <div
+                key={post.id}
+                className="px-4 md:border-b-[1px] md:border-[#FFD8D8] md:px-5"
+              >
+                <DraftPost
+                  post={post}
+                  savePostId={() => setSelectedPostId(post.id)}
+                  viewComments={() => setViewComments(!viewComments)}
+                  clickPost={() => clickPost(post.id)}
+                />
+              </div>
+            ))}
+          </main>
+        </div>
+        <div className="hidden md:block">
+          <div
+            className={
+              viewComments
+                ? "w-[465px] min-h-screen p-4 border-l-[1px] border-[#FFD8D8]"
+                : "w-[290px] min-h-screen p-4 border-l-[1px] border-[#FFD8D8]"
+            }
+          >
+            {viewComments ? (
+              <DesktopComments
+                postId={selectedPostId}
+                closeComments={() => setViewComments(false)}
+              />
+            ) : null}
+          </div>
+        </div>
       </div>
     </Layout>
   );

@@ -53,10 +53,12 @@ export type PostProps = {
  * When you console log post, the object of a post appears with all its properties.
  */
 
-const DraftPost: React.FC<{ post: PostProps; savePostId: () => void }> = ({
-  post,
-  savePostId,
-}) => {
+const DraftPost: React.FC<{
+  post: PostProps;
+  savePostId: () => void;
+  viewComments: () => void;
+  clickPost: () => void;
+}> = ({ post, savePostId, viewComments, clickPost }) => {
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [publish, setPublish] = useState<boolean>(post.published);
   const router = useRouter();
@@ -224,7 +226,7 @@ const DraftPost: React.FC<{ post: PostProps; savePostId: () => void }> = ({
       >
         <ReactMarkdown children={post.content} />
       </div>
-      <div className="text-[14px] hidden md:block" onClick={savePostId}>
+      <div className="text-[14px] hidden md:block" onClick={clickPost}>
         <ReactMarkdown children={post.content} />
       </div>
 
