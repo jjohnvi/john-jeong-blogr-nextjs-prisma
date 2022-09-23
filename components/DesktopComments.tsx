@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSession, getSession } from "next-auth/react";
-import { TbX, TbSend } from "react-icons/tb";
+import { TbX, TbSend, TbDotsVertical, TbTrash } from "react-icons/tb";
 import Router from "next/router";
+import { Popover, Transition } from "@headlessui/react";
+import DeleteModal from "../components/DeleteModal";
 
 interface resData {
   author: {
@@ -23,13 +25,25 @@ interface resData {
   published: boolean;
 }
 
+interface com {
+  user: {
+    image: string;
+    name: string;
+    username: string;
+  };
+}
+
 const DesktopComments: React.FC<{
   postId: string;
   closeComments: () => void;
 }> = ({ postId, closeComments }) => {
   const [data, setData] = useState<resData>();
   const [comment, setComment] = useState<string>("");
-  console.log(data);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+
+  const closeModal = (): void => {
+    setShowDeleteModal(false);
+  };
 
   /**
    * UseEffect.
@@ -58,6 +72,14 @@ const DesktopComments: React.FC<{
     }
   };
 
+  async function deleteComment(id: string): Promise<void> {
+    console.log(id);
+    await axios.delete(`/api/comment/${id}`);
+    setShowDeleteModal(false);
+    fetchResult();
+    Router.push("/");
+  }
+
   const fetchResult = async () => {
     const result = await axios.get(`/api/post/${postId}`);
     setData(result.data);
@@ -78,15 +100,64 @@ const DesktopComments: React.FC<{
   const commentsDisplay = data?.comments.map((comment) => {
     return (
       <div className="py-4">
-        <div className="flex pb-3">
-          <img
-            className="w-[30px] h-[30px] rounded-full"
-            src={comment.user.image}
-          ></img>
-          <div className="text-[14px] font-[600] pl-2">{comment.user.name}</div>
-          <div className="text-[14px] font-[400] text-[#737373] pl-2">
-            {"@" + comment.user.username}
+        <div className="flex pb-3 justify-between">
+          <div className="flex items-center">
+            <img
+              className="w-[30px] h-[30px] rounded-full"
+              src={comment.user.image}
+            ></img>
+            <div className="text-[14px] font-[600] pl-2">
+              {comment.user.name}
+            </div>
+            <div className="text-[14px] font-[400] text-[#737373] pl-2">
+              {"@" + comment.user.username}
+            </div>
           </div>
+          {session && session.user.id === comment.user.id ? (
+            // <div className="flex items-start justify-end">
+            <Popover className="relative">
+              <Popover.Button className="outline-none">
+                <TbDotsVertical />
+              </Popover.Button>
+              <Transition
+                enter="transition duration-300 ease-out"
+                enterFrom="transform scale-95 opacity-0"
+                enterTo="transform scale-100 opacity-100"
+                leave="transition duration-300 ease-out"
+                leaveFrom="transform scale-100 opacity-100"
+                leaveTo="transform scale-95 opacity-0"
+              >
+                <Popover.Panel
+                  static
+                  className="absolute z-10 rounded-[8px] w-[163px] h-[32px] bg-[#FFFFFF] shadow-xl right-[4px]"
+                >
+                  <div className="flex flex-col w-full h-full ">
+                    {/* <div className="flex items-center justify-start  w-full h-full p-[2px]"></div>
+                                <div className="border-b border-[#FFD8D8]"></div>
+                                <div className="flex items-center justify-start  w-full h-full p-[2px]"></div>
+                                <div className="border-b border-[#FFD8D8]"></div> */}
+                    <div className="flex items-center justify-start w-full h-full p-[2px]">
+                      <button
+                        onClick={() => setShowDeleteModal(true)}
+                        className="flex items-center justify-start text-[14px] px-[13.67px] hover:bg-[#FFD8D8] rounded-[8px] w-full h-full"
+                      >
+                        <div className="pr-[9.11px]">
+                          <TbTrash />
+                        </div>
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </Popover.Panel>
+              </Transition>
+            </Popover>
+          ) : null}
+          <DeleteModal
+            visible={showDeleteModal}
+            onClose={closeModal}
+            onDelete={() => deleteComment(comment.id)}
+            name={"comment"}
+          />
         </div>
         <div className="text-[14px]">{comment.content}</div>
       </div>
