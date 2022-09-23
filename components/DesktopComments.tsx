@@ -3,6 +3,7 @@ import axios from "axios";
 import { useSession, getSession } from "next-auth/react";
 import { TbX, TbSend, TbDotsVertical, TbTrash } from "react-icons/tb";
 import Router from "next/router";
+import { useRouter } from "next/router";
 import { Popover, Transition } from "@headlessui/react";
 import DeleteModal from "../components/DeleteModal";
 
@@ -40,6 +41,9 @@ const DesktopComments: React.FC<{
   const [data, setData] = useState<resData>();
   const [comment, setComment] = useState<string>("");
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const router = useRouter();
+  const isActive: (pathname: String) => boolean = (pathname) =>
+    router.pathname === pathname;
 
   const closeModal = (): void => {
     setShowDeleteModal(false);
@@ -66,7 +70,11 @@ const DesktopComments: React.FC<{
       });
       setComment("");
       fetchResult();
-      Router.push("/");
+      if (isActive("/")) {
+        Router.push("/");
+      } else if (isActive("/drafts")) {
+        Router.push("/drafts");
+      }
     } catch (error) {
       console.error(error);
     }
@@ -77,7 +85,11 @@ const DesktopComments: React.FC<{
     await axios.delete(`/api/comment/${id}`);
     setShowDeleteModal(false);
     fetchResult();
-    Router.push("/");
+    if (isActive("/")) {
+      Router.push("/");
+    } else if (isActive("/drafts")) {
+      Router.push("/drafts");
+    }
   }
 
   const fetchResult = async () => {
