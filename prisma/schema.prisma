@@ -91,7 +91,7 @@ model Comment {
   post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade) // If post gets deleted, all comments referring to that postId gets deleted. 
   postId    String?
   replies   Reply[]
-  Like      Like[]
+  likes     Like[]
 }
 
 model Reply {
@@ -114,6 +114,7 @@ model Like {
   commentId String?
 
   @@unique([userId, postId])
+  @@unique([userId, commentId])
 }
 
 // NextAuthjs requires @map and @@map to map some field and model names to different column and table names in the uderlying database.

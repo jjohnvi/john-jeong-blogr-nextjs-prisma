@@ -222,7 +222,7 @@ const Post: React.FC<PostProps> = (props) => {
 
   return (
     <Layout>
-      <div className="p-4">
+      <div className="p-4 pb-[62px]">
         <div className="border-b border- border-[#FFD8D8] w-full pb-[24px]">
           <div className="flex justify-between items-center w-6/12 pb-[45px]">
             <button

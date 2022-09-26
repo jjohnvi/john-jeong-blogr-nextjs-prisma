@@ -7,6 +7,7 @@ export default async function handle(req, res) {
   // console.log(postId);
 
   const session = await getSession({ req });
+  if (req.method === "POST") {
   const result = await prisma.comment.create({
     data: {
       content: content,
@@ -24,4 +25,22 @@ export default async function handle(req, res) {
     },
   });
   res.json(result);
+}
+else if (req.method === "GET") {
+  const comments = await prisma.comment.findMany({
+    where: {postId: postId},
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      user: {
+        select: {name: true, email: true, image: true, username: true}
+      },
+      _count: {
+        select: {likes: true},
+      },
+      likes: true
+    }
+  })
+}
 }

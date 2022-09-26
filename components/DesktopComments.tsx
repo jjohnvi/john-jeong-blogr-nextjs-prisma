@@ -6,8 +6,9 @@ import Router from "next/router";
 import { useRouter } from "next/router";
 import { Popover, Transition } from "@headlessui/react";
 import DeleteModal from "../components/DeleteModal";
+import { Like } from "@prisma/client";
 
-interface resData {
+interface ResData {
   author: {
     name: string;
     email: string;
@@ -15,22 +16,22 @@ interface resData {
     username: string;
   };
   authorId: string;
-  comments: Array<{
-    content: string;
-    id: string;
-    user: string;
-  }>;
+  comments: Array<Comment>;
   content: string;
   createdAt: string;
   id: string;
   published: boolean;
 }
 
-interface com {
+interface Comment {
+  id: string;
+  content: string;
+  likes: Like[];
   user: {
     image: string;
     name: string;
     username: string;
+    id: string;
   };
 }
 
@@ -38,7 +39,7 @@ const DesktopComments: React.FC<{
   postId: string;
   closeComments: () => void;
 }> = ({ postId, closeComments }) => {
-  const [data, setData] = useState<resData>();
+  const [data, setData] = useState<ResData>();
   const [comment, setComment] = useState<string>("");
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const router = useRouter();
@@ -95,6 +96,26 @@ const DesktopComments: React.FC<{
   const fetchResult = async () => {
     const result = await axios.get(`/api/post/${postId}`);
     setData(result.data);
+  };
+
+  const likeComment = async (commentId): Promise<void> => {
+    await axios.post(`/api/like/comment/${commentId}`);
+    if (isActive("/")) {
+      Router.push("/");
+    } else if (isActive("/drafts")) {
+      Router.push("/drafts");
+    }
+  };
+
+  const deleteLike = async (commentId): Promise<void> => {
+    await axios.delete(`/api/like/commment/${commentId}`, {
+      data: { userId: session.user.id },
+    });
+    if (isActive("/")) {
+      Router.push("/");
+    } else if (isActive("/drafts")) {
+      Router.push("/drafts");
+    }
   };
 
   useEffect(() => {
@@ -178,8 +199,8 @@ const DesktopComments: React.FC<{
 
   //fetch comments using postId
   return (
-    <div>
-      <div className="w-full h-screen px-8 pt-5">
+    <div className="relative">
+      <div className="w-full h-screen px-8 pt-5 pb-[62px]">
         {data ? (
           <div className=" border-b-[1px] border-[#FFD8D8]">
             <div className="flex-col justify-between items-start w-full">
@@ -209,7 +230,7 @@ const DesktopComments: React.FC<{
           </div>
         ) : null}
       </div>
-      <div className="flex fixed bottom-0 h-[62px] border-t w-[400px] border-[#FFD8D8] p-[16px] items-center justify-between bg-[#FFFAFA]">
+      <div className="flex fixed bottom-0 h-[62px] border-t w-[465px] border-[#FFD8D8] p-[16px] items-center justify-between bg-[#FFFAFA] right-0">
         {session ? (
           <div className="flex items-center w-full bg-[#FFFAFA]">
             <img
@@ -218,7 +239,7 @@ const DesktopComments: React.FC<{
             />
             <input
               maxLength={255}
-              className="border-none bg-[#FFFAFA w-full h-[62px] flex justify-center items-center outline-none resize-none p-[14px] text-[14px] font-[500] placeholder-[#BAB8B8]"
+              className="border-none bg-[#FFFAFA] w-full h-[62px] flex justify-center items-center outline-none resize-none p-[14px] text-[14px] font-[500] placeholder-[#BAB8B8]"
               value={comment}
               placeholder={`Comment as ${session.user.name}...`}
               onChange={(e) => setComment(e.target.value)}
