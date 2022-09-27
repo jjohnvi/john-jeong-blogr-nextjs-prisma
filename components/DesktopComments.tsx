@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSession, getSession } from "next-auth/react";
-import { TbX, TbSend, TbDotsVertical, TbTrash } from "react-icons/tb";
+import {
+  TbX,
+  TbSend,
+  TbDotsVertical,
+  TbTrash,
+  TbHeart,
+  TbBrandHipchat,
+} from "react-icons/tb";
 import Router from "next/router";
 import { useRouter } from "next/router";
 import { Popover, Transition } from "@headlessui/react";
@@ -27,6 +34,7 @@ interface Comment {
   id: string;
   content: string;
   likes: Like[];
+  _count: { likes: number };
   user: {
     image: string;
     name: string;
@@ -100,6 +108,7 @@ const DesktopComments: React.FC<{
 
   const likeComment = async (commentId): Promise<void> => {
     await axios.post(`/api/like/comment/${commentId}`);
+    fetchResult();
     if (isActive("/")) {
       Router.push("/");
     } else if (isActive("/drafts")) {
@@ -111,6 +120,7 @@ const DesktopComments: React.FC<{
     await axios.delete(`/api/like/commment/${commentId}`, {
       data: { userId: session.user.id },
     });
+    fetchResult();
     if (isActive("/")) {
       Router.push("/");
     } else if (isActive("/drafts")) {
@@ -131,6 +141,12 @@ const DesktopComments: React.FC<{
   }, [postId]);
 
   const commentsDisplay = data?.comments.map((comment) => {
+    const loggedInUserId = session?.user.id;
+    const isCommentLiked = comment.likes
+      ?.map((like) => {
+        return like.userId;
+      })
+      .includes(loggedInUserId);
     return (
       <div className="py-4">
         <div className="flex pb-3 justify-between">
@@ -193,6 +209,26 @@ const DesktopComments: React.FC<{
           />
         </div>
         <div className="text-[14px]">{comment.content}</div>
+        <div className="pt-[17px]">
+          {isCommentLiked ? (
+            <div
+              className="flex items-center"
+              onClick={() => deleteLike(comment.id)}
+            >
+              <TbHeart className="fill-[#FF7070]" />
+              <div className="px-[3px]">{comment?._count?.likes}</div>
+            </div>
+          ) : (
+            <div className="flex items-center">
+              <div onClick={() => likeComment(comment.id)}>
+                <TbHeart />
+              </div>
+              <div className="px-[3px]">
+                {comment?._count?.likes !== 0 ? comment?._count?.likes : null}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     );
   });

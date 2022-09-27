@@ -44,7 +44,10 @@ export default async function handle(req, res) {
             select: { name: true, email: true, image: true, username: true },
           },
           comments: {
-            select: {content: true, id: true, user: true, likes: true },
+            select: {content: true, id: true, user: true, likes: true,
+            _count: {
+              select: {likes: true}
+            } },
           }
         },
       });
