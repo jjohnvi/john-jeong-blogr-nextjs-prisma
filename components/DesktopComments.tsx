@@ -117,7 +117,7 @@ const DesktopComments: React.FC<{
   };
 
   const deleteLike = async (commentId): Promise<void> => {
-    await axios.delete(`/api/like/commment/${commentId}`, {
+    await axios.delete(`/api/like/comment/${commentId}`, {
       data: { userId: session.user.id },
     });
     fetchResult();
