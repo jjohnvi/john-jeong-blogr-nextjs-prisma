@@ -80,8 +80,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       },
     },
   });
-  // post.comments[0].user.name;
-  // console.log(post);
+
   return {
     props: post,
   };
@@ -179,7 +178,6 @@ const Post: React.FC<PostProps> = (props) => {
   };
 
   async function deleteComment(id: string): Promise<void> {
-    console.log(id);
     await fetch(`/api/comment/${id}`, {
       method: "DELETE",
     });
@@ -203,9 +201,6 @@ const Post: React.FC<PostProps> = (props) => {
     setEditMode(false);
     Router.push(`/p/${props.id}`);
   }
-
-  console.log(session);
-  console.log(props);
 
   const changeViewEditComment = () => {
     setViewEditcomment(!viewEditComment);

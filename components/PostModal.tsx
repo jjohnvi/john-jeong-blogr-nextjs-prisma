@@ -34,8 +34,6 @@ const PostModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
       console.error(error);
     }
   };
-
-  // console.log(content);
   return (
     <div className="fixed inset-0 bg-opacity-30 backdrop-blur-[4px] flex justify-center items-end">
       <div className="bg-[#FFFAFA] w-full h-[347px] rounded-[16px] p-4">

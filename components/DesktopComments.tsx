@@ -90,7 +90,6 @@ const DesktopComments: React.FC<{
   };
 
   async function deleteComment(id: string): Promise<void> {
-    console.log(id);
     await axios.delete(`/api/comment/${id}`);
     setShowDeleteModal(false);
     fetchResult();
@@ -132,7 +131,6 @@ const DesktopComments: React.FC<{
     const fetchResult = async () => {
       const result = await axios.get(`/api/post/${postId}`);
       setData(result.data);
-      console.log(result.data);
       return result;
     };
     if (postId) {

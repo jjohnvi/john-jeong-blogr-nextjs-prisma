@@ -85,7 +85,6 @@ const Post: React.FC<{
 
   async function unpublishPost(id: string): Promise<void> {
     // setPublish(false);
-    // console.log("unpublishfired");
     await axios.put(`api/post/${id}`, { published: false });
   }
 

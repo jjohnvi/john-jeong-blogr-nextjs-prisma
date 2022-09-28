@@ -34,7 +34,6 @@ export default async function handle(req, res) {
     res.json(updatedPost);
   } else if (req.method === "GET") {
     const postId = req.query.id
-    // console.log(postId);
       const post = await prisma.post.findUnique({
         where: {
           id: String(postId),

@@ -4,7 +4,6 @@ import { getSession } from "next-auth/react";
 export default async function handle(req, res) {
   const { content } = req.body;
   const { postId } = req.query;
-  // console.log(postId);
 
   const session = await getSession({ req });
   if (req.method === "POST") {

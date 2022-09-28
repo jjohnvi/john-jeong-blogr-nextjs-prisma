@@ -4,7 +4,6 @@ import { getSession } from "next-auth/react";
 export default async function handle(req, res) {
   const { content } = req.body;
   const { commentId } = req.query;
-  console.log(commentId);
 
   const session = await getSession({ req });
   const result = await prisma.reply.create({

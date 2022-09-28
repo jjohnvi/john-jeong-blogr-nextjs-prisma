@@ -68,8 +68,6 @@ const Blog: React.FC<Props> = (props) => {
   const handleView = (): void => {
     setViewComments(!viewComments);
   };
-  console.log(selectedPostId);
-  console.log(props);
   return (
     <Layout>
       <div className="flex">
