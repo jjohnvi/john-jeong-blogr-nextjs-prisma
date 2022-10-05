@@ -234,7 +234,7 @@ const DesktopComments: React.FC<{
   //fetch comments using postId
   return (
     <div className="relative">
-      <div className="w-full h-screen px-8 pt-5 pb-[62px]">
+      <div className="w-full px-8 pt-5 pb-[62px]">
         {data ? (
           <div className=" border-b-[1px] border-[#FFD8D8]">
             <div className="flex-col justify-between items-start w-full">

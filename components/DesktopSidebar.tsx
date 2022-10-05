@@ -20,7 +20,7 @@ const DesktopSidebar: React.FC = () => {
   const { data: session, status } = useSession();
 
   return (
-    <div className="flex flex-col justify-between items-center w-[290px] min-h-screen p-4">
+    <div className="flex flex-col justify-between items-center w-full min-h-screen p-4">
       <div className="fixed top-3">
         <div className="flex items-center text-[24px] font-[700] text-[#CA7474] py-4">
           <TbMoodCrazyHappy />
